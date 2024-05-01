@@ -1,26 +1,28 @@
+// ignore_for_file: invalid_annotation_target
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'pokemon_api_model.freezed.dart';
 part 'pokemon_api_model.g.dart';
 
 @freezed
-class Pokemon with _$Pokemon {
-  const factory Pokemon({
+class PokemonApiModel with _$PokemonApiModel {
+  const factory PokemonApiModel({
     required int id,
     required String name,
-    required int baseExperience,
+    @JsonKey(name: 'base_experience') required int baseExperience,
     required int height,
     required int weight,
     required int order,
-    required bool isDefault,
+    @JsonKey(name: 'is_default') required bool isDefault,
     required List<PokemonAbility> abilities,
     required List<PokemonType> types,
     required PokemonSprites sprites,
     required List<PokemonStat> stats,
-  }) = _Pokemon;
+  }) = _PokemonApiModel;
 
-  factory Pokemon.fromJson(Map<String, dynamic> json) =>
-      _$PokemonFromJson(json);
+  factory PokemonApiModel.fromJson(Map<String, dynamic> json) =>
+      _$PokemonApiModelFromJson(json);
 }
 
 @freezed
@@ -48,14 +50,14 @@ class PokemonType with _$PokemonType {
 @freezed
 class PokemonSprites with _$PokemonSprites {
   const factory PokemonSprites({
-    required String frontDefault,
-    required String frontShiny,
-    required String frontFemale,
-    required String frontShinyFemale,
-    required String backDefault,
-    required String backShiny,
-    required String backFemale,
-    required String backShinyFemale,
+    @JsonKey(name: 'front_default') required String frontDefault,
+    @JsonKey(name: 'front_shiny') required String frontShiny,
+    @JsonKey(name: 'front_female') required String frontFemale,
+    @JsonKey(name: 'front_shiny_female') required String frontShinyFemale,
+    @JsonKey(name: 'back_default') required String backDefault,
+    @JsonKey(name: 'back_shiny') required String backShiny,
+    @JsonKey(name: 'back_female') required String backFemale,
+    @JsonKey(name: 'back_shiny_female') required String backShinyFemale,
   }) = _PokemonSprites;
 
   factory PokemonSprites.fromJson(Map<String, dynamic> json) =>
@@ -65,7 +67,7 @@ class PokemonSprites with _$PokemonSprites {
 @freezed
 class PokemonStat with _$PokemonStat {
   const factory PokemonStat({
-    required int baseStat,
+    @JsonKey(name: 'base_stat') required int baseStat,
     required int effort,
     required PokemonStatDetail stat,
   }) = _PokemonStat;

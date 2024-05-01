@@ -6,15 +6,16 @@ part of 'pokemon_api_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$PokemonImpl _$$PokemonImplFromJson(Map<String, dynamic> json) =>
-    _$PokemonImpl(
+_$PokemonApiModelImpl _$$PokemonApiModelImplFromJson(
+        Map<String, dynamic> json) =>
+    _$PokemonApiModelImpl(
       id: (json['id'] as num).toInt(),
       name: json['name'] as String,
-      baseExperience: (json['baseExperience'] as num).toInt(),
+      baseExperience: (json['base_experience'] as num).toInt(),
       height: (json['height'] as num).toInt(),
       weight: (json['weight'] as num).toInt(),
       order: (json['order'] as num).toInt(),
-      isDefault: json['isDefault'] as bool,
+      isDefault: json['is_default'] as bool,
       abilities: (json['abilities'] as List<dynamic>)
           .map((e) => PokemonAbility.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -27,15 +28,16 @@ _$PokemonImpl _$$PokemonImplFromJson(Map<String, dynamic> json) =>
           .toList(),
     );
 
-Map<String, dynamic> _$$PokemonImplToJson(_$PokemonImpl instance) =>
+Map<String, dynamic> _$$PokemonApiModelImplToJson(
+        _$PokemonApiModelImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
-      'baseExperience': instance.baseExperience,
+      'base_experience': instance.baseExperience,
       'height': instance.height,
       'weight': instance.weight,
       'order': instance.order,
-      'isDefault': instance.isDefault,
+      'is_default': instance.isDefault,
       'abilities': instance.abilities,
       'types': instance.types,
       'sprites': instance.sprites,
@@ -69,39 +71,39 @@ Map<String, dynamic> _$$PokemonTypeImplToJson(_$PokemonTypeImpl instance) =>
 
 _$PokemonSpritesImpl _$$PokemonSpritesImplFromJson(Map<String, dynamic> json) =>
     _$PokemonSpritesImpl(
-      frontDefault: json['frontDefault'] as String,
-      frontShiny: json['frontShiny'] as String,
-      frontFemale: json['frontFemale'] as String,
-      frontShinyFemale: json['frontShinyFemale'] as String,
-      backDefault: json['backDefault'] as String,
-      backShiny: json['backShiny'] as String,
-      backFemale: json['backFemale'] as String,
-      backShinyFemale: json['backShinyFemale'] as String,
+      frontDefault: json['front_default'] as String,
+      frontShiny: json['front_shiny'] as String,
+      frontFemale: json['front_female'] as String,
+      frontShinyFemale: json['front_shiny_female'] as String,
+      backDefault: json['back_default'] as String,
+      backShiny: json['back_shiny'] as String,
+      backFemale: json['back_female'] as String,
+      backShinyFemale: json['back_shiny_female'] as String,
     );
 
 Map<String, dynamic> _$$PokemonSpritesImplToJson(
         _$PokemonSpritesImpl instance) =>
     <String, dynamic>{
-      'frontDefault': instance.frontDefault,
-      'frontShiny': instance.frontShiny,
-      'frontFemale': instance.frontFemale,
-      'frontShinyFemale': instance.frontShinyFemale,
-      'backDefault': instance.backDefault,
-      'backShiny': instance.backShiny,
-      'backFemale': instance.backFemale,
-      'backShinyFemale': instance.backShinyFemale,
+      'front_default': instance.frontDefault,
+      'front_shiny': instance.frontShiny,
+      'front_female': instance.frontFemale,
+      'front_shiny_female': instance.frontShinyFemale,
+      'back_default': instance.backDefault,
+      'back_shiny': instance.backShiny,
+      'back_female': instance.backFemale,
+      'back_shiny_female': instance.backShinyFemale,
     };
 
 _$PokemonStatImpl _$$PokemonStatImplFromJson(Map<String, dynamic> json) =>
     _$PokemonStatImpl(
-      baseStat: (json['baseStat'] as num).toInt(),
+      baseStat: (json['base_stat'] as num).toInt(),
       effort: (json['effort'] as num).toInt(),
       stat: PokemonStatDetail.fromJson(json['stat'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$PokemonStatImplToJson(_$PokemonStatImpl instance) =>
     <String, dynamic>{
-      'baseStat': instance.baseStat,
+      'base_stat': instance.baseStat,
       'effort': instance.effort,
       'stat': instance.stat,
     };
