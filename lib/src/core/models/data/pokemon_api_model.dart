@@ -1,5 +1,7 @@
-part 'pokemon.freezed.dart';
-part 'pokemon.g.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'pokemon_api_model.freezed.dart';
+part 'pokemon_api_model.g.dart';
 
 @freezed
 class Pokemon with _$Pokemon {
@@ -8,14 +10,13 @@ class Pokemon with _$Pokemon {
     required String name,
     required int baseExperience,
     required int height,
-    required bool isDefault,
-    required int order,
     required int weight,
-    required List<Ability> abilities,
-    required List<Move> moves,
-    required Sprites sprites,
-    required List<Stat> stats,
-    required List<Type> types,
+    required int order,
+    required bool isDefault,
+    required List<PokemonAbility> abilities,
+    required List<PokemonType> types,
+    required PokemonSprites sprites,
+    required List<PokemonStat> stats,
   }) = _Pokemon;
 
   factory Pokemon.fromJson(Map<String, dynamic> json) =>
@@ -23,141 +24,63 @@ class Pokemon with _$Pokemon {
 }
 
 @freezed
-class Ability with _$Ability {
-  const factory Ability({
-    required AbilityInfo ability,
-    required bool isHidden,
-    required int slot,
-  }) = _Ability;
-
-  factory Ability.fromJson(Map<String, dynamic> json) =>
-      _$AbilityFromJson(json);
-}
-
-@freezed
-class AbilityInfo with _$AbilityInfo {
-  const factory AbilityInfo({
+class PokemonAbility with _$PokemonAbility {
+  const factory PokemonAbility({
     required String name,
     required String url,
-  }) = _AbilityInfo;
+  }) = _PokemonAbility;
 
-  factory AbilityInfo.fromJson(Map<String, dynamic> json) =>
-      _$AbilityInfoFromJson(json);
+  factory PokemonAbility.fromJson(Map<String, dynamic> json) =>
+      _$PokemonAbilityFromJson(json);
 }
 
 @freezed
-class Move with _$Move {
-  const factory Move({
-    required MoveInfo move,
-  }) = _Move;
-
-  factory Move.fromJson(Map<String, dynamic> json) => _$MoveFromJson(json);
-}
-
-@freezed
-class MoveInfo with _$MoveInfo {
-  const factory MoveInfo({
+class PokemonType with _$PokemonType {
+  const factory PokemonType({
     required String name,
     required String url,
-  }) = _MoveInfo;
+  }) = _PokemonType;
 
-  factory MoveInfo.fromJson(Map<String, dynamic> json) =>
-      _$MoveInfoFromJson(json);
+  factory PokemonType.fromJson(Map<String, dynamic> json) =>
+      _$PokemonTypeFromJson(json);
 }
 
 @freezed
-class Sprites with _$Sprites {
-  const factory Sprites({
+class PokemonSprites with _$PokemonSprites {
+  const factory PokemonSprites({
+    required String frontDefault,
+    required String frontShiny,
+    required String frontFemale,
+    required String frontShinyFemale,
     required String backDefault,
-    required String backFemale,
     required String backShiny,
+    required String backFemale,
     required String backShinyFemale,
-    required String frontDefault,
-    required String frontFemale,
-    required String frontShiny,
-    required String frontShinyFemale,
-    required Other other,
-  }) = _Sprites;
+  }) = _PokemonSprites;
 
-  factory Sprites.fromJson(Map<String, dynamic> json) =>
-      _$SpritesFromJson(json);
+  factory PokemonSprites.fromJson(Map<String, dynamic> json) =>
+      _$PokemonSpritesFromJson(json);
 }
 
 @freezed
-class Other with _$Other {
-  const factory Other({
-    required DreamWorld dreamWorld,
-    required Home home,
-    required OfficialArtwork officialArtwork,
-  }) = _Other;
-
-  factory Other.fromJson(Map<String, dynamic> json) => _$OtherFromJson(json);
-}
-
-@freezed
-class DreamWorld with _$DreamWorld {
-  const factory DreamWorld({
-    required String frontDefault,
-    required String frontFemale,
-  }) = _DreamWorld;
-
-  factory DreamWorld.fromJson(Map<String, dynamic> json) =>
-      _$DreamWorldFromJson(json);
-}
-
-@freezed
-class Home with _$Home {
-  const factory Home({
-    required String frontDefault,
-    required String frontFemale,
-    required String frontShiny,
-    required String frontShinyFemale,
-  }) = _Home;
-
-  factory Home.fromJson(Map<String, dynamic> json) => _$HomeFromJson(json);
-}
-
-@freezed
-class OfficialArtwork with _$OfficialArtwork {
-  const factory OfficialArtwork({
-    required String frontDefault,
-  }) = _OfficialArtwork;
-
-  factory OfficialArtwork.fromJson(Map<String, dynamic> json) =>
-      _$OfficialArtworkFromJson(json);
-}
-
-@freezed
-class Stat with _$Stat {
-  const factory Stat({
+class PokemonStat with _$PokemonStat {
+  const factory PokemonStat({
     required int baseStat,
     required int effort,
-    required StatInfo stat,
-  }) = _Stat;
+    required PokemonStatDetail stat,
+  }) = _PokemonStat;
 
-  factory Stat.fromJson(Map<String, dynamic> json) => _$StatFromJson(json);
+  factory PokemonStat.fromJson(Map<String, dynamic> json) =>
+      _$PokemonStatFromJson(json);
 }
 
 @freezed
-class StatInfo with _$StatInfo {
-  const factory StatInfo({
+class PokemonStatDetail with _$PokemonStatDetail {
+  const factory PokemonStatDetail({
     required String name,
     required String url,
-  }) = _StatInfo;
+  }) = _PokemonStatDetail;
 
-  factory StatInfo.fromJson(Map<String, dynamic> json) =>
-      _$StatInfoFromJson(json);
+  factory PokemonStatDetail.fromJson(Map<String, dynamic> json) =>
+      _$PokemonStatDetailFromJson(json);
 }
-
-@freezed
-class Type with _$Type {
-  const factory Type({
-    required int slot,
-    required TypeInfo type,
-  }) = _Type;
-
-  factory Type.fromJson(Map<String, dynamic> json) => _$TypeFromJson(json);
-}
-
-@freezed
-class TypeInfo with _$TypeInfo
