@@ -16,7 +16,7 @@ abstract class DataSource<T> {
 
   /// Returns all the data if any, an empty list otherwise. It throws an
   /// [Exception] in case of any error
-  Future<List<T>> readAll();
+  // Future<List<T>> readAll();
 
   /// Updates the given data into this data source. It throws an [Exception]
   /// in case of any error
