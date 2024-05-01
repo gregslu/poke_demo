@@ -9,18 +9,19 @@ class PokemonRemoteDataSource implements DataSource<PokemonApiModel> {
   @override
   Future<PokemonApiModel> read(int id) async {
     try {
-      final res = await http
-          .get(Uri.parse('https://pokeapi.co/api/v2/pokemon/$id'))
-          .timeout(const Duration(seconds: 4));
-      if (res.statusCode == 200) {
-        final json = jsonDecode(res.body) as Map<String, dynamic>;
-        return PokemonApiModel.fromJson(json);
-      } else {
-        throw Exception();
-      }
+      final url = 'https://pokeapi.co/api/v2/pokemon/$id';
+      final response =
+          await http.get(Uri.parse(url)).timeout(const Duration(seconds: 4));
+      if (response.statusCode != 200) throw Exception();
+      return _parsePokemon(response.body);
     } catch (e) {
       throw Exception(
-          'Unable to read Pokemon with the id: $id from the remote API, ${e.toString()}');
+          'Unable to read Pokemon with the id: $id from the remote API, $e');
     }
+  }
+
+  PokemonApiModel _parsePokemon(String responseBody) {
+    final deserialized = jsonDecode(responseBody) as Map<String, dynamic>;
+    return PokemonApiModel.fromJson(deserialized);
   }
 }
