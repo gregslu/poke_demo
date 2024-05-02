@@ -20,8 +20,8 @@ class PokemonRemoteDataSource implements DataSource<PokemonApiModel> {
     }
   }
 
-  PokemonApiModel _parsePokemon(String responseBody) {
-    final deserialized = jsonDecode(responseBody) as Map<String, dynamic>;
-    return PokemonApiModel.fromJson(deserialized);
+  PokemonApiModel _parsePokemon(String jsonStr) {
+    final jsonObj = jsonDecode(jsonStr) as Map<String, dynamic>;
+    return PokemonApiModel.fromJson(jsonObj);
   }
 }
