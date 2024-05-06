@@ -1,11 +1,20 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../core/models/data_sources/data_source.dart';
+import '../../../core/models/data_sources/remote_data_source.dart';
 import '../data/pokemon_api_model.dart';
 
-class PokemonRemoteDataSource implements DataSource<PokemonApiModel> {
+part 'pokemon_remote_data_source.g.dart';
+
+@riverpod
+RemoteDataSource<PokemonApiModel> pokemonRemoteDataSource(
+    PokemonRemoteDataSourceRef ref) {
+  return PokemonRemoteDataSource();
+}
+
+class PokemonRemoteDataSource implements RemoteDataSource<PokemonApiModel> {
   @override
   Future<PokemonApiModel> read(int id) async {
     try {
