@@ -11,13 +11,14 @@ Connectivity connectivity(ConnectivityRef ref) {
 }
 
 class Connectivity {
-  static final instance = Connectivity._();
   Connectivity._();
+
+  static final instance = Connectivity._();
 
   Future<bool> isConnected() async {
     try {
-      final result = await InternetAddress.lookup('google.com')
-          .timeout(const Duration(seconds: 4));
+      final result = await InternetAddress.lookup('google.com');
+      // .timeout(const Duration(seconds: 4));
       return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
     } catch (e) {
       debugPrint('No internet, $e');
