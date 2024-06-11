@@ -1,6 +1,9 @@
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:poke_demo/src/pokemon/views/pages/pokemon_details_page.dart';
+import 'package:poke_demo/src/pokemon/views/pages/pokemons_page.dart';
 
 import 'sample_feature/sample_item_details_view.dart';
 import 'sample_feature/sample_item_list_view.dart';
@@ -26,6 +29,7 @@ class MyApp extends StatelessWidget {
       listenable: settingsController,
       builder: (BuildContext context, Widget? child) {
         return MaterialApp(
+          debugShowCheckedModeBanner: false,
           // Providing a restorationScopeId allows the Navigator built by the
           // MaterialApp to restore the navigation stack when a user leaves and
           // returns to the app after it has been killed while running in the
@@ -56,8 +60,13 @@ class MyApp extends StatelessWidget {
           // Define a light and dark color theme. Then, read the user's
           // preferred ThemeMode (light, dark, or system default) from the
           // SettingsController to display the correct theme.
-          theme: ThemeData(),
-          darkTheme: ThemeData.dark(),
+          // The Mandy red, light theme.
+          theme: FlexThemeData.light(scheme: FlexScheme.mandyRed),
+          // The Mandy red, dark theme.
+          darkTheme: FlexThemeData.dark(
+              scheme: FlexScheme.mandyRed,
+              splashFactory: InkSparkle.splashFactory),
+          // Use dark or light theme based on system setting.
           themeMode: settingsController.themeMode,
 
           // Define a function to handle named routes in order to support
@@ -72,8 +81,12 @@ class MyApp extends StatelessWidget {
                   case SampleItemDetailsView.routeName:
                     return const SampleItemDetailsView();
                   case SampleItemListView.routeName:
-                  default:
                     return const SampleItemListView();
+                  case PokemonDetails.routeName:
+                    return const PokemonDetails();
+                  case PokemonsPage.routeName:
+                  default:
+                    return const PokemonsPage();
                 }
               },
             );
