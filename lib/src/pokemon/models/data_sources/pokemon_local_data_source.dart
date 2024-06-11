@@ -16,34 +16,18 @@ LocalDataSource<PokemonApiModel> pokemonLocalDataSource(
 class PokemonLocalDataSource implements LocalDataSource<PokemonApiModel> {
   static const _pokemonKey = '_pokemonKey';
 
-  @override
-  Future<PokemonApiModel> read(int id) async {
-    final pokemons = await readAll();
-    return pokemons.firstWhere((e) => e.id == id,
-        orElse: () => throw Exception('Pokemon with id $id not found'));
-  }
-
   // Future<SharedPreferences> get _prefs => SharedPreferences.getInstance();
 
   @override
   Future<void> create(PokemonApiModel pokemon) async {
     final pokemons = await readAll();
-    final index = pokemons.indexWhere((e) => e.id == pokemon.id);
-    if (index == -1) {
+    final first = pokemons.firstWhere((e) => e.id == pokemon.id,
+        orElse: () => const PokemonApiModel());
+    if (first.isEmpty) {
       pokemons.add(pokemon);
-      await createAll(pokemons);
+      createAll(pokemons);
     } else {
       update(pokemon);
-    }
-  }
-
-  @override
-  Future<void> update(PokemonApiModel pokemon) async {
-    final pokemons = await readAll();
-    final index = pokemons.indexWhere((e) => e.id == pokemon.id);
-    if (index != -1) {
-      pokemons[index] = pokemon;
-      await createAll(pokemons);
     }
   }
 
@@ -60,13 +44,34 @@ class PokemonLocalDataSource implements LocalDataSource<PokemonApiModel> {
   }
 
   @override
+  Future<void> delete(int id) async {
+    final pokemons = await readAll();
+    final index = pokemons.indexWhere((e) => e.id == id);
+    if (index == -1) return;
+    pokemons.removeAt(index);
+    createAll(pokemons);
+  }
+
+  @override
+  Future<void> deleteLast() async {
+    final pokemons = await readAll();
+    if (pokemons.isEmpty) return;
+    pokemons.removeLast();
+    createAll(pokemons);
+  }
+
+  @override
+  Future<PokemonApiModel> read(int id) async {
+    final pokemons = await readAll();
+    return pokemons.firstWhere((e) => e.id == id,
+        orElse: () => throw Exception('Pokemon with id $id not found.'));
+  }
+
+  @override
   Future<List<PokemonApiModel>> readAll() async {
     final prefs = await SharedPreferences.getInstance();
+    final jsonStr = prefs.getString(_pokemonKey) ?? '[]';
     try {
-      final jsonStr = prefs.getString(_pokemonKey);
-      if (jsonStr == null) {
-        throw Exception('Cannot decode ${jsonStr.runtimeType}');
-      }
       final jsonObj = jsonDecode(jsonStr) as List;
       return jsonObj.map((e) => PokemonApiModel.fromJson(e)).toList();
     } catch (e) {
@@ -75,12 +80,11 @@ class PokemonLocalDataSource implements LocalDataSource<PokemonApiModel> {
   }
 
   @override
-  Future<void> delete(int id) async {
+  Future<void> update(PokemonApiModel pokemon) async {
     final pokemons = await readAll();
-    final index = pokemons.indexWhere((e) => e.id == id);
-    if (index != -1) {
-      pokemons.removeAt(index);
-      await createAll(pokemons);
-    }
+    final index = pokemons.indexWhere((e) => e.id == pokemon.id);
+    if (index == -1) return;
+    pokemons[index] = pokemon;
+    createAll(pokemons);
   }
 }
