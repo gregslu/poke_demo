@@ -25,4 +25,6 @@ abstract class LocalDataSource<T> {
   /// Deletes the data specified by the given id if any. It throws an
   /// [Exception] in case of any error
   Future<void> delete(int id);
+
+  Future<void> deleteLast();
 }
