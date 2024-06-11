@@ -18,7 +18,7 @@ abstract class Repository<T> {
 
   /// Returns the data specified by the given id if any, null otherwise. It
   /// throws an [Exception] in case of any error
-  Future<T?> read(int id);
+  Future<T> read(int id);
 
   /// Returns all the data if any, an empty list otherwise. It throws an
   /// [Exception] in case of any error
@@ -31,6 +31,8 @@ abstract class Repository<T> {
   /// Deletes the data specified by the given id if any. It throws an
   /// [Exception] in case of any error
   Future<void> delete(int id);
+
+  Future<void> deleteLast();
 
   /// Refreshes the actual data with the most up to date data. It throws an
   /// [Exception] in case of any error
