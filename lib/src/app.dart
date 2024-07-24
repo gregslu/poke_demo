@@ -2,25 +2,22 @@ import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:poke_demo/src/pokemon/views/pages/pokemon_details_page.dart';
 import 'package:poke_demo/src/pokemon/views/pages/pokemons_page.dart';
 
-import 'sample_feature/sample_item_details_view.dart';
-import 'sample_feature/sample_item_list_view.dart';
 import 'settings/settings_controller.dart';
 import 'settings/settings_view.dart';
 
 /// The Widget that configures your application.
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({
     super.key,
-    required this.settingsController,
   });
 
-  final SettingsController settingsController;
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final settingsController = ref.watch(settingsControllerProvider);
     // Glue the SettingsController to the MaterialApp.
     //
     // The ListenableBuilder Widget listens to the SettingsController for changes.
@@ -65,7 +62,7 @@ class MyApp extends StatelessWidget {
           // The Mandy red, dark theme.
           darkTheme: FlexThemeData.dark(
               scheme: FlexScheme.mandyRed,
-              splashFactory: InkSparkle.splashFactory),
+              splashFactory: InkRipple.splashFactory),
           // Use dark or light theme based on system setting.
           themeMode: settingsController.themeMode,
 
@@ -77,11 +74,7 @@ class MyApp extends StatelessWidget {
               builder: (BuildContext context) {
                 switch (routeSettings.name) {
                   case SettingsView.routeName:
-                    return SettingsView(controller: settingsController);
-                  case SampleItemDetailsView.routeName:
-                    return const SampleItemDetailsView();
-                  case SampleItemListView.routeName:
-                    return const SampleItemListView();
+                    return const SettingsView();
                   case PokemonDetails.routeName:
                     return const PokemonDetails();
                   case PokemonsPage.routeName:

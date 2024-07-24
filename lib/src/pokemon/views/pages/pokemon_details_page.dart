@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:poke_demo/src/core/common_widgets/async_value_widget.dart';
 import 'package:poke_demo/src/pokemon/models/repositories/pokemon_repository.dart';
@@ -19,7 +20,7 @@ class PokemonDetails extends StatelessWidget {
       body: SafeArea(
         child: Stack(
           children: [
-            _PokemonDetailsPanel(pokemonId: pokemonId),
+            _PokemonDetailsPanel(pokemonId),
             _LoadingIndicator(pokemonId),
             _ErrorIndicator(pokemonId),
           ],
@@ -30,14 +31,14 @@ class PokemonDetails extends StatelessWidget {
 }
 
 class _PokemonDetailsPanel extends ConsumerWidget {
-  const _PokemonDetailsPanel({
+  const _PokemonDetailsPanel(
+    this.pokemonId, {
     super.key,
-    required this.pokemonId,
   });
 
-  static const _size = 200.0;
-
   final String pokemonId;
+
+  static const _size = 200.0;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -52,7 +53,11 @@ class _PokemonDetailsPanel extends ConsumerWidget {
             Padding(
                 padding: const EdgeInsets.all(32.0),
                 child: CircularImage(
-                    size: _size, imageUrl: pokemon.sprites.frontDefault ?? '')),
+                  size: _size,
+                  imageUrl: pokemon.sprites.frontDefault ??
+                      pokemon.sprites.frontShiny ??
+                      '',
+                )),
             _Tile(title: 'Name', content: pokemon.name),
             _Tile(
                 title: 'Experience',
@@ -96,23 +101,43 @@ class _Tile extends StatelessWidget {
   }
 }
 
-class _LoadingIndicator extends ConsumerWidget {
-  const _LoadingIndicator(this.pokemonId);
+class _LoadingIndicator extends HookConsumerWidget {
+  const _LoadingIndicator(
+    this.pokemonId, {
+    super.key,
+  });
 
   final String pokemonId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final animationController =
+        useAnimationController(duration: const Duration(seconds: 2));
+    final colorTween = ColorTween(
+      begin: Theme.of(context).colorScheme.primary,
+      end: Theme.of(context).colorScheme.secondary,
+    );
+    final valueColor = animationController.drive(colorTween);
+    useEffect(() {
+      animationController.repeat(reverse: true);
+      return null;
+    }, const []);
     final isLoading = ref.watch(
         pokemonProvider(int.parse(pokemonId)).select((s) => s.isLoading));
     return isLoading
-        ? const LinearProgressIndicator(minHeight: 8.0)
+        ? LinearProgressIndicator(
+            minHeight: 8.0,
+            valueColor: valueColor,
+          )
         : const SizedBox.shrink();
   }
 }
 
 class _ErrorIndicator extends ConsumerWidget {
-  const _ErrorIndicator(this.pokemonId);
+  const _ErrorIndicator(
+    this.pokemonId, {
+    super.key,
+  });
 
   final String pokemonId;
 
@@ -121,13 +146,13 @@ class _ErrorIndicator extends ConsumerWidget {
     ref.listen(
       pokemonProvider(int.parse(pokemonId)),
       (prev, next) => next.whenOrNull(
-        error: (error, stackTrace) =>
-            ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(error.toString()),
-            duration: const Duration(seconds: 2),
+        error: (error, stackTrace) => ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(
+            SnackBar(
+              content: Text(error.toString()),
+            ),
           ),
-        ),
       ),
     );
     return const SizedBox.shrink();

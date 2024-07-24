@@ -26,7 +26,7 @@ _$PokemonApiModelImpl _$$PokemonApiModelImplFromJson(
           const <PokemonType>[],
       sprites: json['sprites'] == null
           ? const PokemonSprites(frontDefault: '', frontShiny: '')
-          : PokemonSprites.fromJson(json['sprites'] as Map<String, dynamic>),
+          : _extractImage(json['sprites'] as Object),
       stats: (json['stats'] as List<dynamic>?)
               ?.map((e) => PokemonStat.fromJson(e as Map<String, dynamic>))
               .toList() ??
@@ -123,7 +123,6 @@ _$PokemonSpritesImpl _$$PokemonSpritesImplFromJson(Map<String, dynamic> json) =>
     _$PokemonSpritesImpl(
       frontDefault: json['front_default'] as String?,
       frontShiny: json['front_shiny'] as String?,
-      backShinyFemale: json['backShinyFemale'],
     );
 
 Map<String, dynamic> _$$PokemonSpritesImplToJson(
@@ -131,7 +130,6 @@ Map<String, dynamic> _$$PokemonSpritesImplToJson(
     <String, dynamic>{
       'front_default': instance.frontDefault,
       'front_shiny': instance.frontShiny,
-      'backShinyFemale': instance.backShinyFemale,
     };
 
 _$PokemonStatImpl _$$PokemonStatImplFromJson(Map<String, dynamic> json) =>

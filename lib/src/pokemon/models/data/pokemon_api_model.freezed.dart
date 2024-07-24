@@ -31,6 +31,7 @@ mixin _$PokemonApiModel {
   bool get isDefault => throw _privateConstructorUsedError;
   List<PokemonAbility> get abilities => throw _privateConstructorUsedError;
   List<PokemonType> get types => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: _extractImage)
   PokemonSprites get sprites => throw _privateConstructorUsedError;
   List<PokemonStat> get stats => throw _privateConstructorUsedError;
   List<PokemonMove> get moves => throw _privateConstructorUsedError;
@@ -57,7 +58,7 @@ abstract class $PokemonApiModelCopyWith<$Res> {
       @JsonKey(name: 'is_default') bool isDefault,
       List<PokemonAbility> abilities,
       List<PokemonType> types,
-      PokemonSprites sprites,
+      @JsonKey(fromJson: _extractImage) PokemonSprites sprites,
       List<PokemonStat> stats,
       List<PokemonMove> moves});
 
@@ -169,7 +170,7 @@ abstract class _$$PokemonApiModelImplCopyWith<$Res>
       @JsonKey(name: 'is_default') bool isDefault,
       List<PokemonAbility> abilities,
       List<PokemonType> types,
-      PokemonSprites sprites,
+      @JsonKey(fromJson: _extractImage) PokemonSprites sprites,
       List<PokemonStat> stats,
       List<PokemonMove> moves});
 
@@ -267,6 +268,7 @@ class _$PokemonApiModelImpl extends _PokemonApiModel {
       @JsonKey(name: 'is_default') this.isDefault = false,
       final List<PokemonAbility> abilities = const <PokemonAbility>[],
       final List<PokemonType> types = const <PokemonType>[],
+      @JsonKey(fromJson: _extractImage)
       this.sprites = const PokemonSprites(frontDefault: '', frontShiny: ''),
       final List<PokemonStat> stats = const <PokemonStat>[],
       final List<PokemonMove> moves = const <PokemonMove>[]})
@@ -319,7 +321,7 @@ class _$PokemonApiModelImpl extends _PokemonApiModel {
   }
 
   @override
-  @JsonKey()
+  @JsonKey(fromJson: _extractImage)
   final PokemonSprites sprites;
   final List<PokemonStat> _stats;
   @override
@@ -409,7 +411,7 @@ abstract class _PokemonApiModel extends PokemonApiModel {
       @JsonKey(name: 'is_default') final bool isDefault,
       final List<PokemonAbility> abilities,
       final List<PokemonType> types,
-      final PokemonSprites sprites,
+      @JsonKey(fromJson: _extractImage) final PokemonSprites sprites,
       final List<PokemonStat> stats,
       final List<PokemonMove> moves}) = _$PokemonApiModelImpl;
   const _PokemonApiModel._() : super._();
@@ -438,6 +440,7 @@ abstract class _PokemonApiModel extends PokemonApiModel {
   @override
   List<PokemonType> get types;
   @override
+  @JsonKey(fromJson: _extractImage)
   PokemonSprites get sprites;
   @override
   List<PokemonStat> get stats;
@@ -1353,7 +1356,6 @@ mixin _$PokemonSprites {
   String? get frontDefault => throw _privateConstructorUsedError;
   @JsonKey(name: 'front_shiny')
   String? get frontShiny => throw _privateConstructorUsedError;
-  dynamic get backShinyFemale => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -1369,8 +1371,7 @@ abstract class $PokemonSpritesCopyWith<$Res> {
   @useResult
   $Res call(
       {@JsonKey(name: 'front_default') String? frontDefault,
-      @JsonKey(name: 'front_shiny') String? frontShiny,
-      dynamic backShinyFemale});
+      @JsonKey(name: 'front_shiny') String? frontShiny});
 }
 
 /// @nodoc
@@ -1388,7 +1389,6 @@ class _$PokemonSpritesCopyWithImpl<$Res, $Val extends PokemonSprites>
   $Res call({
     Object? frontDefault = freezed,
     Object? frontShiny = freezed,
-    Object? backShinyFemale = freezed,
   }) {
     return _then(_value.copyWith(
       frontDefault: freezed == frontDefault
@@ -1399,10 +1399,6 @@ class _$PokemonSpritesCopyWithImpl<$Res, $Val extends PokemonSprites>
           ? _value.frontShiny
           : frontShiny // ignore: cast_nullable_to_non_nullable
               as String?,
-      backShinyFemale: freezed == backShinyFemale
-          ? _value.backShinyFemale
-          : backShinyFemale // ignore: cast_nullable_to_non_nullable
-              as dynamic,
     ) as $Val);
   }
 }
@@ -1417,8 +1413,7 @@ abstract class _$$PokemonSpritesImplCopyWith<$Res>
   @useResult
   $Res call(
       {@JsonKey(name: 'front_default') String? frontDefault,
-      @JsonKey(name: 'front_shiny') String? frontShiny,
-      dynamic backShinyFemale});
+      @JsonKey(name: 'front_shiny') String? frontShiny});
 }
 
 /// @nodoc
@@ -1434,7 +1429,6 @@ class __$$PokemonSpritesImplCopyWithImpl<$Res>
   $Res call({
     Object? frontDefault = freezed,
     Object? frontShiny = freezed,
-    Object? backShinyFemale = freezed,
   }) {
     return _then(_$PokemonSpritesImpl(
       frontDefault: freezed == frontDefault
@@ -1445,9 +1439,6 @@ class __$$PokemonSpritesImplCopyWithImpl<$Res>
           ? _value.frontShiny
           : frontShiny // ignore: cast_nullable_to_non_nullable
               as String?,
-      backShinyFemale: freezed == backShinyFemale
-          ? _value.backShinyFemale!
-          : backShinyFemale,
     ));
   }
 }
@@ -1457,8 +1448,7 @@ class __$$PokemonSpritesImplCopyWithImpl<$Res>
 class _$PokemonSpritesImpl implements _PokemonSprites {
   const _$PokemonSpritesImpl(
       {@JsonKey(name: 'front_default') required this.frontDefault,
-      @JsonKey(name: 'front_shiny') required this.frontShiny,
-      this.backShinyFemale});
+      @JsonKey(name: 'front_shiny') required this.frontShiny});
 
   factory _$PokemonSpritesImpl.fromJson(Map<String, dynamic> json) =>
       _$$PokemonSpritesImplFromJson(json);
@@ -1469,12 +1459,10 @@ class _$PokemonSpritesImpl implements _PokemonSprites {
   @override
   @JsonKey(name: 'front_shiny')
   final String? frontShiny;
-  @override
-  final dynamic backShinyFemale;
 
   @override
   String toString() {
-    return 'PokemonSprites(frontDefault: $frontDefault, frontShiny: $frontShiny, backShinyFemale: $backShinyFemale)';
+    return 'PokemonSprites(frontDefault: $frontDefault, frontShiny: $frontShiny)';
   }
 
   @override
@@ -1485,15 +1473,12 @@ class _$PokemonSpritesImpl implements _PokemonSprites {
             (identical(other.frontDefault, frontDefault) ||
                 other.frontDefault == frontDefault) &&
             (identical(other.frontShiny, frontShiny) ||
-                other.frontShiny == frontShiny) &&
-            const DeepCollectionEquality()
-                .equals(other.backShinyFemale, backShinyFemale));
+                other.frontShiny == frontShiny));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, frontDefault, frontShiny,
-      const DeepCollectionEquality().hash(backShinyFemale));
+  int get hashCode => Object.hash(runtimeType, frontDefault, frontShiny);
 
   @JsonKey(ignore: true)
   @override
@@ -1512,9 +1497,9 @@ class _$PokemonSpritesImpl implements _PokemonSprites {
 
 abstract class _PokemonSprites implements PokemonSprites {
   const factory _PokemonSprites(
-      {@JsonKey(name: 'front_default') required final String? frontDefault,
-      @JsonKey(name: 'front_shiny') required final String? frontShiny,
-      final dynamic backShinyFemale}) = _$PokemonSpritesImpl;
+          {@JsonKey(name: 'front_default') required final String? frontDefault,
+          @JsonKey(name: 'front_shiny') required final String? frontShiny}) =
+      _$PokemonSpritesImpl;
 
   factory _PokemonSprites.fromJson(Map<String, dynamic> json) =
       _$PokemonSpritesImpl.fromJson;
@@ -1525,8 +1510,6 @@ abstract class _PokemonSprites implements PokemonSprites {
   @override
   @JsonKey(name: 'front_shiny')
   String? get frontShiny;
-  @override
-  dynamic get backShinyFemale;
   @override
   @JsonKey(ignore: true)
   _$$PokemonSpritesImplCopyWith<_$PokemonSpritesImpl> get copyWith =>

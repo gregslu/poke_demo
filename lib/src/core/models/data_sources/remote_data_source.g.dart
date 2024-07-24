@@ -1,28 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'pokemon_remote_data_source.dart';
+part of 'remote_data_source.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$pokemonRemoteDataSourceHash() =>
-    r'cdd7caccf17ed1f5f8650e28f6f61a5b33efa39b';
+String _$remoteDataSourceHash() => r'27ed388209cbc4ce56c58ee00e659aedf2141819';
 
-/// See also [pokemonRemoteDataSource].
-@ProviderFor(pokemonRemoteDataSource)
-final pokemonRemoteDataSourceProvider =
+/// See also [remoteDataSource].
+@ProviderFor(remoteDataSource)
+final remoteDataSourceProvider =
     AutoDisposeProvider<RemoteDataSource<PokemonApiModel>>.internal(
-  pokemonRemoteDataSource,
-  name: r'pokemonRemoteDataSourceProvider',
+  remoteDataSource,
+  name: r'remoteDataSourceProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$pokemonRemoteDataSourceHash,
+      : _$remoteDataSourceHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef PokemonRemoteDataSourceRef
+typedef RemoteDataSourceRef
     = AutoDisposeProviderRef<RemoteDataSource<PokemonApiModel>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

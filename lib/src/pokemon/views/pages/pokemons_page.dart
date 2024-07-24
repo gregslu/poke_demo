@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:poke_demo/src/core/common_widgets/async_value_widget.dart';
 import 'package:poke_demo/src/pokemon/models/data/pokemon_api_model.dart';
@@ -43,7 +44,7 @@ class PokemonsPage extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           _AddPokemonButton(),
-          SizedBox(width: 8.0),
+          SizedBox(width: 16.0),
           _RemovePokemonButton(),
         ],
       ),
@@ -52,11 +53,10 @@ class PokemonsPage extends ConsumerWidget {
 }
 
 final _random = Random();
+const _max = 1026;
 
 class _AddPokemonButton extends ConsumerWidget {
   const _AddPokemonButton();
-
-  static const _max = 1026;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -82,12 +82,20 @@ class _RemovePokemonButton extends ConsumerWidget {
   }
 }
 
-class _PokemonsList extends ConsumerWidget {
+class _PokemonsList extends HookConsumerWidget {
   const _PokemonsList();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pokemonsAsync = ref.watch(pokemonsViewModelProvider);
+    useEffect(() {
+      WidgetsBinding.instance.addPostFrameCallback((final _) {
+        ref
+            .read(pokemonsViewModelProvider.notifier)
+            .readPokemon(_random.nextInt(_max));
+      });
+      return null;
+    }, const []);
     return AsyncValueWidget<List<PokemonApiModel>>(
       skipLoadingOnReload: true,
       skipError: true,
@@ -107,18 +115,77 @@ class _PokemonsList extends ConsumerWidget {
   }
 }
 
-class _LoadingIndicator extends ConsumerWidget {
+class _LoadingIndicator extends HookConsumerWidget {
   const _LoadingIndicator();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final animationController =
+        useAnimationController(duration: const Duration(seconds: 2));
+    final colorTween = ColorTween(
+      begin: Theme.of(context).colorScheme.primary,
+      end: Theme.of(context).colorScheme.secondary,
+    );
+    final valueColor = animationController.drive(colorTween);
+    useEffect(() {
+      animationController.repeat(reverse: true);
+      return null;
+    }, const []);
     final isLoading =
         ref.watch(pokemonsViewModelProvider.select((s) => s.isLoading));
     return isLoading
-        ? const LinearProgressIndicator(minHeight: 8.0)
+        ? LinearProgressIndicator(
+            minHeight: 8.0,
+            valueColor: valueColor,
+          )
         : const SizedBox.shrink();
   }
 }
+
+// class _LoadingIndicator extends ConsumerStatefulWidget {
+//   const _LoadingIndicator({super.key});
+
+//   @override
+//   ConsumerState<ConsumerStatefulWidget> createState() =>
+//       _LoadingIndicatorState();
+// }
+
+// class _LoadingIndicatorState extends ConsumerState<_LoadingIndicator>
+//     with SingleTickerProviderStateMixin {
+//   late final AnimationController _animationController;
+
+//   @override
+//   void dispose() {
+//     _animationController.dispose();
+//     super.dispose();
+//   }
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     _animationController = AnimationController(
+//       vsync: this,
+//       duration: const Duration(seconds: 2),
+//     )..repeat(reverse: true);
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final isLoading =
+//         ref.watch(pokemonsViewModelProvider.select((s) => s.isLoading));
+//     final colorTween = ColorTween(
+//       begin: Theme.of(context).colorScheme.primary,
+//       end: Theme.of(context).colorScheme.secondary,
+//     );
+//     final valueColor = _animationController.drive(colorTween);
+//     return isLoading
+//         ? LinearProgressIndicator(
+//             minHeight: 8.0,
+//             valueColor: valueColor,
+//           )
+//         : const SizedBox.shrink();
+//   }
+// }
 
 class _ErrorIndicator extends ConsumerWidget {
   const _ErrorIndicator();
@@ -128,15 +195,13 @@ class _ErrorIndicator extends ConsumerWidget {
     ref.listen(
       pokemonsViewModelProvider,
       (prev, next) => next.whenOrNull(
-        error: (error, stackTrace) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                content: Text(error.toString()),
-              ),
-            );
-        },
+        error: (error, stackTrace) => ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(
+            SnackBar(
+              content: Text(error.toString()),
+            ),
+          ),
       ),
     );
     return const SizedBox.shrink();

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'error_message_widget.dart';
-
 class AsyncValueWidget<T> extends StatelessWidget {
   const AsyncValueWidget({
     super.key,
@@ -20,17 +18,19 @@ class AsyncValueWidget<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return value.when(
-        skipLoadingOnReload: skipLoadingOnReload,
-        skipLoadingOnRefresh: skipLoadingOnRefresh,
-        skipError: skipError,
-        data: data,
-        error: (e, st) => Center(
-                child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ErrorMessageWidget(error: e),
-            )),
-        loading: () => const SizedBox.shrink());
+    return value.whenOrNull(
+          skipLoadingOnReload: skipLoadingOnReload,
+          skipLoadingOnRefresh: skipLoadingOnRefresh,
+          skipError: skipError,
+          data: data,
+          // error: (e, st) => Center(
+          //     child: Padding(
+          //   padding: const EdgeInsets.all(8.0),
+          //   child: ErrorMessageWidget(error: e),
+          // )),
+          // loading: () => const SizedBox.shrink(),
+        ) ??
+        const SizedBox.shrink();
   }
 }
 
@@ -52,16 +52,18 @@ class AsyncValueSliverWidget<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return value.when(
-        skipLoadingOnReload: skipLoadingOnReload,
-        skipLoadingOnRefresh: skipLoadingOnRefresh,
-        skipError: skipError,
-        data: data,
-        error: (e, st) => Center(
-                child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ErrorMessageWidget(error: e),
-            )),
-        loading: () => const SizedBox.shrink());
+    return value.whenOrNull(
+          skipLoadingOnReload: skipLoadingOnReload,
+          skipLoadingOnRefresh: skipLoadingOnRefresh,
+          skipError: skipError,
+          data: data,
+          // error: (e, st) => Center(
+          //     child: Padding(
+          //   padding: const EdgeInsets.all(8.0),
+          //   child: ErrorMessageWidget(error: e),
+          // )),
+          // loading: () => const SizedBox.shrink(),
+        ) ??
+        const SizedBox.shrink();
   }
 }

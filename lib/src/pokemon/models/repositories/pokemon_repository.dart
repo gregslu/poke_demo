@@ -1,4 +1,5 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:poke_demo/src/core/utils/demo_helper.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/models/data_sources/local_data_source.dart';
@@ -6,8 +7,6 @@ import '../../../core/models/data_sources/remote_data_source.dart';
 import '../../../core/models/repositories/repository.dart';
 import '../../../network/utils/connectivity.dart';
 import '../data/pokemon_api_model.dart';
-import '../data_sources/pokemon_local_data_source.dart';
-import '../data_sources/pokemon_remote_data_source.dart';
 
 part 'pokemon_repository.g.dart';
 
@@ -25,13 +24,8 @@ FutureOr<PokemonApiModel> pokemon(PokemonRef ref, int pokemonId) async {
 class PokemonRepository implements Repository<PokemonApiModel> {
   PokemonRepository(this.ref);
 
+  // This is alternative way of doing dependency injection. One could argue that it's worst, because it's implicit (btw. with Riverpod we ovverrite dependencies in the ProviderScope). It's here for fun :)
   final Ref ref;
-
-  LocalDataSource<PokemonApiModel> get _local =>
-      ref.read(pokemonLocalDataSourceProvider);
-  RemoteDataSource<PokemonApiModel> get _remote =>
-      ref.read(pokemonRemoteDataSourceProvider);
-  Connectivity get _connectivity => ref.read(connectivityProvider);
 
   @override
   Future<void> delete(int id) {
@@ -41,11 +35,14 @@ class PokemonRepository implements Repository<PokemonApiModel> {
 
   @override
   Future<void> deleteLast() async {
-    _local.deleteLast();
+    await _demoHelper.artificialDelay();
+    await _local.deleteLast();
   }
 
   @override
   Future<PokemonApiModel> read(int id) async {
+    // Artificial delay
+    await _demoHelper.artificialDelay();
     if (await _connectivity.isConnected()) {
       final pokemon = await _remote.read(id);
       await _local.create(pokemon);
@@ -58,4 +55,14 @@ class PokemonRepository implements Repository<PokemonApiModel> {
   Future<List<PokemonApiModel>> readAll() {
     return _local.readAll();
   }
+
+  LocalDataSource<PokemonApiModel> get _local =>
+      ref.read(localDataSourceProvider);
+
+  RemoteDataSource<PokemonApiModel> get _remote =>
+      ref.read(remoteDataSourceProvider);
+
+  DemoHelper get _demoHelper => ref.read(demoHelperProvider);
+
+  Connectivity get _connectivity => ref.read(connectivityProvider);
 }
