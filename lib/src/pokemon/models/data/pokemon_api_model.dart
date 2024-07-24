@@ -5,6 +5,16 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'pokemon_api_model.freezed.dart';
 part 'pokemon_api_model.g.dart';
 
+PokemonSprites _extractImage(Object input) {
+  if (input is String && input.startsWith('https://')) {
+    return PokemonSprites(
+      frontDefault: input as String?,
+      frontShiny: input as String?,
+    );
+  }
+  return PokemonSprites.fromJson(input as Map<String, dynamic>);
+}
+
 @freezed
 class PokemonApiModel with _$PokemonApiModel {
   const factory PokemonApiModel({
@@ -17,6 +27,7 @@ class PokemonApiModel with _$PokemonApiModel {
     @JsonKey(name: 'is_default') @Default(false) bool isDefault,
     @Default(<PokemonAbility>[]) List<PokemonAbility> abilities,
     @Default(<PokemonType>[]) List<PokemonType> types,
+    @JsonKey(fromJson: _extractImage)
     @Default(PokemonSprites(frontDefault: '', frontShiny: ''))
     PokemonSprites sprites,
     @Default(<PokemonStat>[]) List<PokemonStat> stats,
@@ -97,7 +108,6 @@ class PokemonSprites with _$PokemonSprites {
   const factory PokemonSprites({
     @JsonKey(name: 'front_default') required String? frontDefault,
     @JsonKey(name: 'front_shiny') required String? frontShiny,
-    backShinyFemale,
   }) = _PokemonSprites;
 
   factory PokemonSprites.fromJson(Map<String, dynamic> json) =>
