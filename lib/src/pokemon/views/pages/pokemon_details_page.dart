@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:poke_demo/src/core/common_widgets/async_value_widget.dart';
 import 'package:poke_demo/src/pokemon/models/repositories/pokemon_repository.dart';
 import 'package:poke_demo/src/pokemon/views/widgets/pokemon_item.dart';
 
@@ -43,46 +42,51 @@ class _PokemonDetailsPanel extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pokemonAsync = ref.watch(pokemonProvider(int.parse(pokemonId)));
-    return AsyncValueWidget(
-      skipLoadingOnReload: true,
-      skipError: true,
-      value: pokemonAsync,
-      data: (pokemon) => SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-                padding: const EdgeInsets.all(32.0),
-                child: CircularImage(
-                  size: _size,
-                  imageUrl: pokemon.sprites.frontDefault ??
-                      pokemon.sprites.frontShiny ??
-                      '',
-                )),
-            _Tile(title: 'Name', content: pokemon.name),
-            _Tile(
-                title: 'Experience',
-                content: pokemon.baseExperience.toString()),
-            _Tile(title: 'Height (dm)', content: pokemon.height.toString()),
-            _Tile(title: 'Weight (hg)', content: pokemon.weight.toString()),
-            _Tile(
-                title: 'Types',
-                content: pokemon.types.map((e) => e.type.name).join(', ')),
-            _Tile(
-                title: 'Stats',
-                content: pokemon.stats
-                    .map((e) => '${e.stat.name}: ${e.baseStat}')
-                    .join(', ')),
-            _Tile(
-                title: 'Abilities',
-                content:
-                    pokemon.abilities.map((e) => e.ability.name).join(', ')),
-            _Tile(
-                title: 'Moves',
-                content: pokemon.moves.map((e) => e.move.name).join(', ')),
-          ],
-        ),
-      ),
-    );
+    final pokemonOrNull = pokemonAsync.valueOrNull;
+    return pokemonOrNull == null
+        ? const SizedBox.shrink()
+        : SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                    padding: const EdgeInsets.all(32.0),
+                    child: CircularImage(
+                      size: _size,
+                      imageUrl: pokemonOrNull.sprites.frontDefault ??
+                          pokemonOrNull.sprites.frontShiny ??
+                          '',
+                    )),
+                _Tile(title: 'Name', content: pokemonOrNull.name),
+                _Tile(
+                    title: 'Experience',
+                    content: pokemonOrNull.baseExperience.toString()),
+                _Tile(
+                    title: 'Height (dm)',
+                    content: pokemonOrNull.height.toString()),
+                _Tile(
+                    title: 'Weight (hg)',
+                    content: pokemonOrNull.weight.toString()),
+                _Tile(
+                    title: 'Types',
+                    content:
+                        pokemonOrNull.types.map((e) => e.type.name).join(', ')),
+                _Tile(
+                    title: 'Stats',
+                    content: pokemonOrNull.stats
+                        .map((e) => '${e.stat.name}: ${e.baseStat}')
+                        .join(', ')),
+                _Tile(
+                    title: 'Abilities',
+                    content: pokemonOrNull.abilities
+                        .map((e) => e.ability.name)
+                        .join(', ')),
+                _Tile(
+                    title: 'Moves',
+                    content:
+                        pokemonOrNull.moves.map((e) => e.move.name).join(', ')),
+              ],
+            ),
+          );
   }
 }
 

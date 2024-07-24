@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:poke_demo/src/core/common_widgets/async_value_widget.dart';
 import 'package:poke_demo/src/pokemon/models/data/pokemon_api_model.dart';
 import 'package:poke_demo/src/pokemon/view_models/pokemons_view_model.dart';
 import 'package:poke_demo/src/pokemon/views/widgets/pokemon_item.dart';
@@ -87,7 +86,6 @@ class _PokemonsList extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pokemonsAsync = ref.watch(pokemonsViewModelProvider);
     useEffect(() {
       WidgetsBinding.instance.addPostFrameCallback((final _) {
         ref
@@ -96,22 +94,24 @@ class _PokemonsList extends HookConsumerWidget {
       });
       return null;
     }, const []);
-    return AsyncValueWidget<List<PokemonApiModel>>(
-      skipLoadingOnReload: true,
-      skipError: true,
-      value: pokemonsAsync,
-      data: (pokemons) => ListView.builder(
-          restorationId: 'pokemonsListView',
-          cacheExtent: pokemons.length < 100 ? pokemons.length * 100.0 : 9999.0,
-          prototypeItem: const PokemonItem(),
-          itemBuilder: (context, index) => ProviderScope(
-                overrides: [
-                  currentPokemonProvider.overrideWithValue(pokemons[index])
-                ],
-                child: const PokemonItem(),
-              ),
-          itemCount: pokemons.length),
-    );
+    final pokemonsAsync = ref.watch(pokemonsViewModelProvider);
+    final pokemonsOrNull = pokemonsAsync.valueOrNull;
+    return pokemonsOrNull == null
+        ? const SizedBox.shrink()
+        : ListView.builder(
+            restorationId: 'pokemonsListView',
+            cacheExtent: pokemonsOrNull.length < 100
+                ? pokemonsOrNull.length * 100.0
+                : 9999.0,
+            prototypeItem: const PokemonItem(),
+            itemBuilder: (context, index) => ProviderScope(
+                  overrides: [
+                    currentPokemonProvider
+                        .overrideWithValue(pokemonsOrNull[index])
+                  ],
+                  child: const PokemonItem(),
+                ),
+            itemCount: pokemonsOrNull.length);
   }
 }
 
