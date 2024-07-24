@@ -66,17 +66,20 @@ class CircularImage extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(size)),
           border: Border.all(
-            color: Theme.of(context).colorScheme.primaryContainer,
+            color: Theme.of(context).colorScheme.primary,
             width: 2,
           ),
         ),
         child: ClipOval(
-            child: CachedNetworkImage(
-          fit: BoxFit.fill,
-          imageUrl: imageUrl,
-          placeholder: (context, url) => _flutterLogo,
-          errorWidget: (context, url, error) => _flutterLogo,
-        )),
+          child: imageUrl.isEmpty
+              ? _flutterLogo
+              : CachedNetworkImage(
+                  fit: BoxFit.fill,
+                  imageUrl: imageUrl,
+                  placeholder: (context, url) => _flutterLogo,
+                  errorWidget: (context, url, error) => _flutterLogo,
+                ),
+        ),
       ),
     );
   }
