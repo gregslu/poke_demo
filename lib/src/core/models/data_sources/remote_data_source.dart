@@ -1,3 +1,9 @@
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+import '../../../pokemon/models/data/pokemon_api_model.dart';
+
+part 'remote_data_source.g.dart';
+
 /// DataSource represents a data source for type [T]. Each data source
 /// supports one-shot CRUD operations on the data [T]. For more information
 /// see https://developer.android.com/jetpack/guide/data-layer
@@ -25,4 +31,9 @@ abstract class RemoteDataSource<T> {
   /// Deletes the data specified by the given id if any. It throws an
   /// [Exception] in case of any error
   // Future<void> delete(int id);
+}
+
+@riverpod
+RemoteDataSource<PokemonApiModel> remoteDataSource(RemoteDataSourceRef ref) {
+  throw UnimplementedError();
 }

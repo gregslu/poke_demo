@@ -1,3 +1,8 @@
+import 'package:poke_demo/src/pokemon/models/data/pokemon_api_model.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'local_data_source.g.dart';
+
 /// DataSource represents a data source for type [T]. Each data source
 /// supports one-shot CRUD operations on the data [T]. For more information
 /// see https://developer.android.com/jetpack/guide/data-layer
@@ -27,4 +32,9 @@ abstract class LocalDataSource<T> {
   Future<void> delete(int id);
 
   Future<void> deleteLast();
+}
+
+@riverpod
+LocalDataSource<PokemonApiModel> localDataSource(LocalDataSourceRef ref) {
+  throw UnimplementedError();
 }
