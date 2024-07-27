@@ -46,7 +46,8 @@ class PokemonRepository implements Repository<PokemonApiModel> {
     if (await _connectivity.isConnected()) {
       final pokemon = await _remote.read(id);
       await _local.create(pokemon);
-      return _local.read(id);
+      // return _local.read(id);
+      return pokemon;
     }
     throw Exception('No internet connection');
   }
