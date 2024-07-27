@@ -16,9 +16,9 @@ class PokemonLocalDataSource implements LocalDataSource<PokemonApiModel> {
         orElse: () => const PokemonApiModel());
     if (first.isEmpty) {
       pokemons.add(pokemon);
-      createAll(pokemons);
+      await createAll(pokemons);
     } else {
-      update(pokemon);
+      await update(pokemon);
     }
   }
 
@@ -28,7 +28,7 @@ class PokemonLocalDataSource implements LocalDataSource<PokemonApiModel> {
     try {
       final jsonObj = pokemons.map((e) => e.toJson()).toList();
       final jsonStr = jsonEncode(jsonObj);
-      prefs.setString(_pokemonKey, jsonStr);
+      await prefs.setString(_pokemonKey, jsonStr);
     } catch (e) {
       throw Exception('Failed to encode json, $e');
     }
@@ -40,7 +40,7 @@ class PokemonLocalDataSource implements LocalDataSource<PokemonApiModel> {
     final index = pokemons.indexWhere((e) => e.id == id);
     if (index == -1) return;
     pokemons.removeAt(index);
-    createAll(pokemons);
+    await createAll(pokemons);
   }
 
   @override
@@ -48,7 +48,7 @@ class PokemonLocalDataSource implements LocalDataSource<PokemonApiModel> {
     final pokemons = await readAll();
     if (pokemons.isEmpty) return;
     pokemons.removeLast();
-    createAll(pokemons);
+    await createAll(pokemons);
   }
 
   @override
@@ -76,6 +76,6 @@ class PokemonLocalDataSource implements LocalDataSource<PokemonApiModel> {
     final index = pokemons.indexWhere((e) => e.id == pokemon.id);
     if (index == -1) return;
     pokemons[index] = pokemon;
-    createAll(pokemons);
+    await createAll(pokemons);
   }
 }

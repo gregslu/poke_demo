@@ -15,13 +15,13 @@ class PokemonsViewModel extends _$PokemonsViewModel {
     } catch (e, stackTrace) {
       state = AsyncValue.error(e, stackTrace);
     }
-    _updateState();
+    await _updateState();
   }
 
   Future<void> deleteLastPokemon() async {
     state = const AsyncValue.loading();
     await _repository.deleteLast();
-    _updateState();
+    await _updateState();
   }
 
   Future<void> _updateState() async {
