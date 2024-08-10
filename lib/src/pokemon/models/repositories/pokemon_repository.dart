@@ -1,10 +1,10 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:poke_demo/src/core/utils/demo_helper.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/models/data_sources/local_data_source.dart';
 import '../../../core/models/data_sources/remote_data_source.dart';
 import '../../../core/models/repositories/repository.dart';
+import '../../../core/utils/demo_helper.dart';
 import '../../../network/utils/connectivity.dart';
 import '../data/pokemon_api_model.dart';
 
@@ -24,7 +24,7 @@ FutureOr<PokemonApiModel> pokemon(PokemonRef ref, int pokemonId) async {
 class PokemonRepository implements Repository<PokemonApiModel> {
   PokemonRepository(this.ref);
 
-  // This is alternative way of doing dependency injection. One could argue that it's worst, because it's implicit (btw. with Riverpod we ovverrite dependencies in the ProviderScope). It's here for fun :)
+  // This is alternative way of doing dependency injection. One could argue that it's worst, because it's implicit (btw. with Riverpod we overwrite dependencies in the ProviderScope). It's here for fun :)
   final Ref ref;
 
   @override
