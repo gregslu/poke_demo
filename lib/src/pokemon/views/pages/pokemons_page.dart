@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:poke_demo/src/pokemon/models/data/pokemon_api_model.dart';
 import 'package:poke_demo/src/pokemon/view_models/pokemons_view_model.dart';
@@ -96,8 +97,8 @@ class _PokemonsList extends HookConsumerWidget {
     }, const []);
     final pokemonsAsync = ref.watch(pokemonsViewModelProvider);
     final pokemonsOrNull = pokemonsAsync.valueOrNull;
-    return pokemonsOrNull == null
-        ? const SizedBox.shrink()
+    return pokemonsOrNull == null || pokemonsOrNull.isEmpty
+        ? const _Empty()
         : ListView.builder(
             restorationId: 'pokemonsListView',
             cacheExtent: pokemonsOrNull.length < 100
@@ -112,6 +113,37 @@ class _PokemonsList extends HookConsumerWidget {
                   child: const PokemonItem(),
                 ),
             itemCount: pokemonsOrNull.length);
+  }
+}
+
+class _Empty extends StatelessWidget {
+  const _Empty({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 200),
+      child: Center(
+        child: Column(
+          children: [
+            SvgPicture.asset(
+              'assets/images/void.svg',
+              width: 150,
+              height: 150, //asset location
+            ),
+            const SizedBox(
+              height: 24,
+            ),
+            const Text(
+              'No pokemon yet',
+              style: TextStyle(fontSize: 20),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 

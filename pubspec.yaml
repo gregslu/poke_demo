@@ -17,6 +17,7 @@ dependencies:
   flutter_hooks: ^0.20.5
   flutter_localizations:
     sdk: flutter
+  flutter_svg: ^2.0.10+1
   freezed_annotation: ^2.4.1
   hooks_riverpod: ^2.5.1
   http: ^1.2.1
