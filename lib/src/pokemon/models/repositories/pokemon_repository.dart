@@ -35,6 +35,9 @@ class PokemonRepository implements Repository<PokemonApiModel> {
 
   @override
   Future<void> deleteLast() async {
+    if ((await _local.readAll()).isEmpty) {
+      return;
+    }
     await _demoHelper.artificialDelay();
     await _local.deleteLast();
   }
