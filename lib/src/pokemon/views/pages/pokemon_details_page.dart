@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:poke_demo/src/pokemon/models/repositories/pokemon_repository.dart';
 import 'package:poke_demo/src/pokemon/views/widgets/pokemon_item.dart';
+
+import '../widgets/loading_indicator.dart';
 
 class PokemonDetails extends StatelessWidget {
   const PokemonDetails({
@@ -16,6 +17,9 @@ class PokemonDetails extends StatelessWidget {
     final pokemonId = (ModalRoute.of(context)!.settings.arguments as String);
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Pokemon Details'),
+      ),
       body: SafeArea(
         child: Stack(
           children: [
@@ -30,10 +34,7 @@ class PokemonDetails extends StatelessWidget {
 }
 
 class _PokemonDetailsPanel extends ConsumerWidget {
-  const _PokemonDetailsPanel(
-    this.pokemonId, {
-    super.key,
-  });
+  const _PokemonDetailsPanel(this.pokemonId);
 
   final String pokemonId;
 
@@ -91,7 +92,7 @@ class _PokemonDetailsPanel extends ConsumerWidget {
 }
 
 class _Tile extends StatelessWidget {
-  const _Tile({super.key, required this.title, required this.content});
+  const _Tile({required this.title, required this.content});
 
   final String content;
   final String title;
@@ -105,43 +106,21 @@ class _Tile extends StatelessWidget {
   }
 }
 
-class _LoadingIndicator extends HookConsumerWidget {
-  const _LoadingIndicator(
-    this.pokemonId, {
-    super.key,
-  });
+class _LoadingIndicator extends ConsumerWidget {
+  const _LoadingIndicator(this.pokemonId);
 
   final String pokemonId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final animationController =
-        useAnimationController(duration: const Duration(seconds: 2));
-    final colorTween = ColorTween(
-      begin: Theme.of(context).colorScheme.primary,
-      end: Theme.of(context).colorScheme.secondary,
-    );
-    final valueColor = animationController.drive(colorTween);
-    useEffect(() {
-      animationController.repeat(reverse: true);
-      return null;
-    }, const []);
     final isLoading = ref.watch(
         pokemonProvider(int.parse(pokemonId)).select((s) => s.isLoading));
-    return isLoading
-        ? LinearProgressIndicator(
-            minHeight: 8.0,
-            valueColor: valueColor,
-          )
-        : const SizedBox.shrink();
+    return isLoading ? const LoadingIndicator() : const SizedBox.shrink();
   }
 }
 
 class _ErrorIndicator extends ConsumerWidget {
-  const _ErrorIndicator(
-    this.pokemonId, {
-    super.key,
-  });
+  const _ErrorIndicator(this.pokemonId);
 
   final String pokemonId;
 
