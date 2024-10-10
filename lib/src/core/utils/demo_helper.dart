@@ -2,6 +2,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../pokemon/models/data/pokemon_api_model.dart';
+import '../../pokemon/models/data_sources/pokemon_local_data_source.dart';
 import '../models/data_sources/local_data_source.dart';
 
 part 'demo_helper.g.dart';
@@ -27,7 +28,7 @@ class DemoHelper {
 
   final bool _artificialDelay = true;
 
-  Future<void> artificialDelay([int ms = 4000]) async {
+  Future<void> artificialDelay([int ms = 3000]) async {
     if (_artificialDelay) {
       await Future.delayed(Duration(milliseconds: ms));
     }

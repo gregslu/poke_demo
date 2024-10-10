@@ -2,7 +2,10 @@ import 'dart:convert';
 
 import 'package:poke_demo/src/core/models/data_sources/local_data_source.dart';
 import 'package:poke_demo/src/pokemon/models/data/pokemon_api_model.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+part 'pokemon_local_data_source.g.dart';
 
 class PokemonLocalDataSource implements LocalDataSource<PokemonApiModel> {
   static const _pokemonKey = '_pokemonKey';
@@ -78,4 +81,9 @@ class PokemonLocalDataSource implements LocalDataSource<PokemonApiModel> {
     pokemons[index] = pokemon;
     await createAll(pokemons);
   }
+}
+
+@riverpod
+LocalDataSource<PokemonApiModel> localDataSource(LocalDataSourceRef ref) {
+  return PokemonLocalDataSource();
 }

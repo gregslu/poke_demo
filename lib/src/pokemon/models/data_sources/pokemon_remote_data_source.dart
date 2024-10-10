@@ -1,9 +1,12 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/models/data_sources/remote_data_source.dart';
 import '../data/pokemon_api_model.dart';
+
+part 'pokemon_remote_data_source.g.dart';
 
 class PokemonRemoteDataSource implements RemoteDataSource<PokemonApiModel> {
   @override
@@ -24,4 +27,9 @@ class PokemonRemoteDataSource implements RemoteDataSource<PokemonApiModel> {
     final jsonObj = jsonDecode(jsonStr) as Map<String, dynamic>;
     return PokemonApiModel.fromJson(jsonObj);
   }
+}
+
+@riverpod
+RemoteDataSource<PokemonApiModel> remoteDataSource(RemoteDataSourceRef ref) {
+  return PokemonRemoteDataSource();
 }

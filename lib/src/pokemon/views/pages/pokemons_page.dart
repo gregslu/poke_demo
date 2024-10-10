@@ -102,8 +102,7 @@ class _PokemonsList extends HookConsumerWidget {
       });
       return null;
     }, const []);
-    final pokemonsAsync = ref.watch(pokemonsViewModelProvider);
-    final pokemonsOrNull = pokemonsAsync.valueOrNull;
+    final pokemonsOrNull = ref.watch(pokemonsViewModelProvider).valueOrNull;
     return pokemonsOrNull == null || pokemonsOrNull.isEmpty
         ? const _Empty()
         : ListView.builder(

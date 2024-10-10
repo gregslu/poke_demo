@@ -7,13 +7,10 @@ import '../../../core/models/repositories/repository.dart';
 import '../../../core/utils/demo_helper.dart';
 import '../../../network/utils/connectivity.dart';
 import '../data/pokemon_api_model.dart';
+import '../data_sources/pokemon_local_data_source.dart';
+import '../data_sources/pokemon_remote_data_source.dart';
 
 part 'pokemon_repository.g.dart';
-
-@riverpod
-Repository<PokemonApiModel> pokemonRepository(PokemonRepositoryRef ref) {
-  return PokemonRepository(ref);
-}
 
 @riverpod
 FutureOr<PokemonApiModel> pokemon(PokemonRef ref, int pokemonId) async {
@@ -24,7 +21,6 @@ FutureOr<PokemonApiModel> pokemon(PokemonRef ref, int pokemonId) async {
 class PokemonRepository implements Repository<PokemonApiModel> {
   PokemonRepository(this.ref);
 
-  // This is alternative way of doing dependency injection. One could argue that it's worst, because it's implicit (btw. with Riverpod we overwrite dependencies in the ProviderScope). It's here for fun :)
   final Ref ref;
 
   @override
@@ -49,8 +45,8 @@ class PokemonRepository implements Repository<PokemonApiModel> {
     if (await _connectivity.isConnected()) {
       final pokemon = await _remote.read(id);
       await _local.create(pokemon);
-      // return await _local.read(id);
-      return pokemon;
+      // return pokemon;
+      return await _local.read(id);
     }
     throw Exception('No internet connection');
   }
@@ -69,4 +65,9 @@ class PokemonRepository implements Repository<PokemonApiModel> {
   DemoHelper get _demoHelper => ref.read(demoHelperProvider);
 
   Connectivity get _connectivity => ref.read(connectivityProvider);
+}
+
+@riverpod
+Repository<PokemonApiModel> pokemonRepository(PokemonRepositoryRef ref) {
+  return PokemonRepository(ref);
 }

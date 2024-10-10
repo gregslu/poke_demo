@@ -6,7 +6,7 @@ part of 'pokemons_view_model.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$pokemonsViewModelHash() => r'27eabb5d0c4d2db0fa87f825645f611c40787684';
+String _$pokemonsViewModelHash() => r'9a19a2bcf6519ea1c90a4c4d707a9e44555cf0a4';
 
 /// See also [PokemonsViewModel].
 @ProviderFor(PokemonsViewModel)
