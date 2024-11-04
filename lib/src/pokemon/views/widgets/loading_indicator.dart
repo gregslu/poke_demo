@@ -22,7 +22,7 @@ class LoadingIndicator extends HookWidget {
       return null;
     }, [colorTween]);
     return LinearProgressIndicator(
-      minHeight: 8.0,
+      // minHeight: 4.0,
       valueColor: valueColor,
     );
   }

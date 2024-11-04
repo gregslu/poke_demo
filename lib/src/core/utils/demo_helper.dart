@@ -8,7 +8,7 @@ import '../models/data_sources/local_data_source.dart';
 part 'demo_helper.g.dart';
 
 @riverpod
-DemoHelper demoHelper(DemoHelperRef ref) {
+DemoHelper demoHelper(Ref ref) {
   return DemoHelper(ref);
 }
 
@@ -26,9 +26,9 @@ class DemoHelper {
 
   final Ref ref;
 
-  final bool _artificialDelay = true;
+  final bool _artificialDelay = false;
 
-  Future<void> artificialDelay([int ms = 3000]) async {
+  Future<void> artificialDelay([int ms = 2000]) async {
     if (_artificialDelay) {
       await Future.delayed(Duration(milliseconds: ms));
     }

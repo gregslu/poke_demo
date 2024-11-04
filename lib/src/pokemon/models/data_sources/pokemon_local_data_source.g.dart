@@ -6,7 +6,7 @@ part of 'pokemon_local_data_source.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$localDataSourceHash() => r'4ce1b6df247c3a6d4dcc121aa18508690d80088a';
+String _$localDataSourceHash() => r'29414474d44a071b70171ec9f4335ad190d6a874';
 
 /// See also [localDataSource].
 @ProviderFor(localDataSource)
@@ -21,7 +21,9 @@ final localDataSourceProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef LocalDataSourceRef
     = AutoDisposeProviderRef<LocalDataSource<PokemonApiModel>>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

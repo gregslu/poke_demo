@@ -13,18 +13,6 @@ import '../widgets/loading_indicator.dart';
 
 part 'pokemons_page.g.dart';
 
-/// A provider which exposes the [Pokemon] displayed by a [PokemonItem].
-///
-/// By retrieving the [Pokemon] through a provider instead of through its
-/// constructor, this allows [PokemonItem] to be instantiated using the `const` keyword.
-///
-/// This ensures that when we add/remove/edit pokemons, only what the
-/// impacted widgets rebuilds, instead of the entire list of items.
-@riverpod
-PokemonApiModel currentPokemon(CurrentPokemonRef ref) {
-  return const PokemonApiModel();
-}
-
 class PokemonsPage extends ConsumerWidget {
   const PokemonsPage({super.key});
 
@@ -45,12 +33,12 @@ class PokemonsPage extends ConsumerWidget {
           ],
         ),
       ),
-      floatingActionButton: const Row(
+      floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          _AddPokemonButton(),
-          SizedBox(width: 16.0),
-          _RemovePokemonButton(),
+          _AddPokemonButton(key: addPokemonButtonKey),
+          const SizedBox(width: 16.0),
+          _RemovePokemonButton(key: removePokemonButtonKey),
         ],
       ),
     );
@@ -61,7 +49,7 @@ final _random = Random();
 const _max = 1026;
 
 class _AddPokemonButton extends ConsumerWidget {
-  const _AddPokemonButton();
+  const _AddPokemonButton({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -75,7 +63,7 @@ class _AddPokemonButton extends ConsumerWidget {
 }
 
 class _RemovePokemonButton extends ConsumerWidget {
-  const _RemovePokemonButton();
+  const _RemovePokemonButton({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -182,3 +170,19 @@ class _ErrorIndicator extends ConsumerWidget {
     return const SizedBox.shrink();
   }
 }
+
+/// A provider which exposes the [Pokemon] displayed by a [PokemonItem].
+///
+/// By retrieving the [Pokemon] through a provider instead of through its
+/// constructor, this allows [PokemonItem] to be instantiated using the `const` keyword.
+///
+/// This ensures that when we add/remove/edit pokemons, only what the
+/// impacted widgets rebuilds, instead of the entire list of items.
+@Riverpod(dependencies: [])
+PokemonApiModel currentPokemon(Ref ref) {
+  return const PokemonApiModel();
+}
+
+// Keys used for testing
+final addPokemonButtonKey = UniqueKey();
+final removePokemonButtonKey = UniqueKey();

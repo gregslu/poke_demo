@@ -6,7 +6,7 @@ part of 'pokemons_page.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$currentPokemonHash() => r'e8f0b1b6755600c767ae9507d4f432aafdde5b18';
+String _$currentPokemonHash() => r'fc2c52b76d90cbbcab09b981f105b8bee0b45cab';
 
 /// A provider which exposes the [Pokemon] displayed by a [PokemonItem].
 ///
@@ -24,10 +24,12 @@ final currentPokemonProvider = AutoDisposeProvider<PokemonApiModel>.internal(
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
       : _$currentPokemonHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
+  dependencies: const <ProviderOrFamily>[],
+  allTransitiveDependencies: const <ProviderOrFamily>{},
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef CurrentPokemonRef = AutoDisposeProviderRef<PokemonApiModel>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

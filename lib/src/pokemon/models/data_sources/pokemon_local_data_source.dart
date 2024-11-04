@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:poke_demo/src/core/models/data_sources/local_data_source.dart';
 import 'package:poke_demo/src/pokemon/models/data/pokemon_api_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -84,6 +85,6 @@ class PokemonLocalDataSource implements LocalDataSource<PokemonApiModel> {
 }
 
 @riverpod
-LocalDataSource<PokemonApiModel> localDataSource(LocalDataSourceRef ref) {
+LocalDataSource<PokemonApiModel> localDataSource(Ref ref) {
   return PokemonLocalDataSource();
 }

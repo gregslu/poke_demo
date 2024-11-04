@@ -6,7 +6,7 @@ part of 'pokemon_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$pokemonHash() => r'6f7a004871b5790aba254fdbf00d9aa58de13926';
+String _$pokemonHash() => r'496a34a4ca754fdb26bbc4f40a06d65f67f47273';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -141,6 +141,8 @@ class PokemonProvider extends AutoDisposeFutureProvider<PokemonApiModel> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin PokemonRef on AutoDisposeFutureProviderRef<PokemonApiModel> {
   /// The parameter `pokemonId` of this provider.
   int get pokemonId;
@@ -154,7 +156,7 @@ class _PokemonProviderElement
   int get pokemonId => (origin as PokemonProvider).pokemonId;
 }
 
-String _$pokemonRepositoryHash() => r'3c3e5f533e02d1935b7e20c851e4d62c98af8205';
+String _$pokemonRepositoryHash() => r'8818b1299c1ab2478625bbfe3c1e418fd7a33c95';
 
 /// See also [pokemonRepository].
 @ProviderFor(pokemonRepository)
@@ -169,7 +171,9 @@ final pokemonRepositoryProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef PokemonRepositoryRef
     = AutoDisposeProviderRef<Repository<PokemonApiModel>>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

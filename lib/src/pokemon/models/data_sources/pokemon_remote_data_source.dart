@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -30,6 +31,6 @@ class PokemonRemoteDataSource implements RemoteDataSource<PokemonApiModel> {
 }
 
 @riverpod
-RemoteDataSource<PokemonApiModel> remoteDataSource(RemoteDataSourceRef ref) {
+RemoteDataSource<PokemonApiModel> remoteDataSource(Ref ref) {
   return PokemonRemoteDataSource();
 }

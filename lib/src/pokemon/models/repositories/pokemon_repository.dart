@@ -13,7 +13,7 @@ import '../data_sources/pokemon_remote_data_source.dart';
 part 'pokemon_repository.g.dart';
 
 @riverpod
-FutureOr<PokemonApiModel> pokemon(PokemonRef ref, int pokemonId) async {
+FutureOr<PokemonApiModel> pokemon(Ref ref, int pokemonId) async {
   final pokemonRepository = ref.watch(pokemonRepositoryProvider);
   return pokemonRepository.read(pokemonId);
 }
@@ -31,9 +31,9 @@ class PokemonRepository implements Repository<PokemonApiModel> {
 
   @override
   Future<void> deleteLast() async {
-    if ((await _local.readAll()).isEmpty) {
-      return;
-    }
+    // if ((await _local.readAll()).isEmpty) {
+    //   return;
+    // }
     await _demoHelper.artificialDelay();
     await _local.deleteLast();
   }
@@ -68,6 +68,6 @@ class PokemonRepository implements Repository<PokemonApiModel> {
 }
 
 @riverpod
-Repository<PokemonApiModel> pokemonRepository(PokemonRepositoryRef ref) {
+Repository<PokemonApiModel> pokemonRepository(Ref ref) {
   return PokemonRepository(ref);
 }

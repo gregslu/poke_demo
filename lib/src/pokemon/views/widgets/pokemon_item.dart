@@ -66,7 +66,7 @@ class CircularImage extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(size)),
           border: Border.all(
-            color: Theme.of(context).colorScheme.primary,
+            color: Theme.of(context).colorScheme.secondaryContainer,
             width: 2,
           ),
         ),

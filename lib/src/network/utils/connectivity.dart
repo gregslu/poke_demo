@@ -1,12 +1,13 @@
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'connectivity.g.dart';
 
 @riverpod
-Connectivity connectivity(ConnectivityRef ref) {
+Connectivity connectivity(Ref ref) {
   return Connectivity.instance;
 }
 
