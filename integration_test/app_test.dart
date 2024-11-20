@@ -18,7 +18,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byType(MyApp), findsOneWidget);
       expect(find.byType(PokemonItem), findsOneWidget);
-      await tester.tap(find.byKey(addPokemonButtonKey));
+      await tester.tap(find.byKey(buttonAddKey));
       await tester.pumpAndSettle();
       expect(find.byType(PokemonItem), findsNWidgets(2));
       await tester.tap(find.byType(PokemonItem).first);
@@ -29,10 +29,10 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byType(PokemonDetails), findsNothing);
       expect(find.byType(PokemonsPage), findsOneWidget);
-      await tester.tap(find.byKey(removePokemonButtonKey));
+      await tester.tap(find.byKey(buttonRemoveKey));
       await tester.pumpAndSettle();
       expect(find.byType(PokemonItem), findsOneWidget);
-      await tester.tap(find.byKey(removePokemonButtonKey));
+      await tester.tap(find.byKey(buttonRemoveKey));
       await tester.pumpAndSettle();
       expect(find.byType(PokemonItem), findsNothing);
 

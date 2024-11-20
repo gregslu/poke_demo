@@ -13,10 +13,11 @@ class PokemonRemoteDataSource implements RemoteDataSource<PokemonApiModel> {
   @override
   Future<PokemonApiModel> read(int id) async {
     try {
-      final url = 'https://pokeapi.co/api/v2/pokemon/$id';
-      final response =
-          await http.get(Uri.parse(url)).timeout(const Duration(seconds: 4));
-      if (response.statusCode != 200) throw Exception();
+      final uri = Uri.https('pokeapi.co', '/api/v2/pokemon/$id');
+      final response = await http.get(uri).timeout(const Duration(seconds: 4));
+      if (response.statusCode != 200) {
+        throw Exception('Status code ${response.statusCode}');
+      }
       return _parsePokemon(response.body);
     } catch (e) {
       throw Exception(

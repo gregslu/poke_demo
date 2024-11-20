@@ -36,9 +36,9 @@ class PokemonsPage extends ConsumerWidget {
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          _AddPokemonButton(key: addPokemonButtonKey),
+          _AddPokemonButton(key: buttonAddKey),
           const SizedBox(width: 16.0),
-          _RemovePokemonButton(key: removePokemonButtonKey),
+          _RemovePokemonButton(key: buttonRemoveKey),
         ],
       ),
     );
@@ -46,7 +46,7 @@ class PokemonsPage extends ConsumerWidget {
 }
 
 final _random = Random();
-const _max = 1026;
+const _max = 1025;
 
 class _AddPokemonButton extends ConsumerWidget {
   const _AddPokemonButton({super.key});
@@ -54,9 +54,10 @@ class _AddPokemonButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return FloatingActionButton(
+      heroTag: 'buttonAdd',
       onPressed: () => ref
           .read(pokemonsViewModelProvider.notifier)
-          .readPokemon(_random.nextInt(_max)),
+          .readPokemon(_random.nextInt(_max) + 1),
       child: const Icon(Icons.add),
     );
   }
@@ -68,7 +69,7 @@ class _RemovePokemonButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return FloatingActionButton(
-      heroTag: null,
+      heroTag: 'buttonDelete',
       onPressed: ref.read(pokemonsViewModelProvider.notifier).deleteLastPokemon,
       child: const Icon(Icons.remove),
     );
@@ -94,6 +95,8 @@ class _PokemonsList extends HookConsumerWidget {
     return pokemonsOrNull == null || pokemonsOrNull.isEmpty
         ? const _Empty()
         : ListView.builder(
+            padding: EdgeInsets.symmetric(
+                vertical: Theme.of(context).cardTheme.margin?.vertical ?? 4),
             restorationId: 'pokemonsListView',
             cacheExtent: pokemonsOrNull.length < 100
                 ? pokemonsOrNull.length * 100.0
@@ -184,5 +187,5 @@ PokemonApiModel currentPokemon(Ref ref) {
 }
 
 // Keys used for testing
-final addPokemonButtonKey = UniqueKey();
-final removePokemonButtonKey = UniqueKey();
+final buttonAddKey = UniqueKey();
+final buttonRemoveKey = UniqueKey();
