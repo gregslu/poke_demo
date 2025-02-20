@@ -5,6 +5,7 @@ import 'package:poke_demo/main.dart' as app;
 import 'package:poke_demo/src/app.dart';
 import 'package:poke_demo/src/pokemon/views/pages/pokemon_details_page.dart';
 import 'package:poke_demo/src/pokemon/views/pages/pokemons_page.dart';
+import 'package:poke_demo/src/pokemon/views/widgets/actions_fabs_row.dart';
 import 'package:poke_demo/src/pokemon/views/widgets/pokemon_item.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
