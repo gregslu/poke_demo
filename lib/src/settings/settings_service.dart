@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-part 'settings_service.g.dart';
 
 /// A service that stores and retrieves user settings.
 ///
@@ -18,9 +14,4 @@ class SettingsService {
     // Use the shared_preferences package to persist settings locally or the
     // http package to persist settings over the network.
   }
-}
-
-@riverpod
-SettingsService settingsService(Ref ref) {
-  return SettingsService();
 }

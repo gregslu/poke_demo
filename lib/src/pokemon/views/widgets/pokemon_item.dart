@@ -1,18 +1,19 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:poke_demo/src/pokemon/models/data/pokemon_api_model.dart';
 import 'package:poke_demo/src/pokemon/views/pages/pokemon_details_page.dart';
-import 'package:poke_demo/src/pokemon/views/pages/pokemons_page.dart';
 
 // Overral size of [PokemonItemPrototype] and [PokemonItem] widgets must match
-class PokemonItem extends ConsumerWidget {
-  const PokemonItem({
+class PokemonItem extends StatelessWidget {
+  const PokemonItem(
+    this.pokemon, {
     super.key,
   });
 
+  final PokemonApiModel pokemon;
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final pokemon = ref.watch(currentPokemonProvider);
+  Widget build(BuildContext context) {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(2),
