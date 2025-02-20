@@ -1,9 +1,9 @@
+import 'package:context_watch/context_watch.dart';
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:poke_demo/src/pokemon/models/repositories/pokemon_repository.dart';
-import 'package:poke_demo/src/pokemon/views/widgets/pokemon_item.dart';
 
+import '../../../di.dart';
 import '../widgets/loading_indicator.dart';
+import '../widgets/pokemon_item.dart';
 
 class PokemonDetails extends StatelessWidget {
   const PokemonDetails({
@@ -14,6 +14,7 @@ class PokemonDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('****** PokemonDetails rebuild *******');
     final pokemonId = (ModalRoute.of(context)!.settings.arguments as String);
 
     return Scaffold(
@@ -33,7 +34,7 @@ class PokemonDetails extends StatelessWidget {
   }
 }
 
-class _PokemonDetailsPanel extends ConsumerWidget {
+class _PokemonDetailsPanel extends StatelessWidget {
   const _PokemonDetailsPanel(this.pokemonId);
 
   final String pokemonId;
@@ -41,10 +42,13 @@ class _PokemonDetailsPanel extends ConsumerWidget {
   static const _size = 200.0;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final pokemonAsync = ref.watch(pokemonProvider(int.parse(pokemonId)));
-    final pokemonOrNull = pokemonAsync.valueOrNull;
-    return pokemonOrNull == null
+  Widget build(BuildContext context) {
+    final pokemon = di
+        .getPokemonDetailsViewModel(pokemonId)
+        .state
+        .watchOnly(context, (state) => state.value.pokemon);
+
+    return pokemon.isEmpty
         ? const SizedBox.shrink()
         : SingleChildScrollView(
             child: Column(
@@ -53,38 +57,32 @@ class _PokemonDetailsPanel extends ConsumerWidget {
                     padding: const EdgeInsets.all(32.0),
                     child: CircularImage(
                       size: _size,
-                      imageUrl: pokemonOrNull.sprites.frontDefault ??
-                          pokemonOrNull.sprites.frontShiny ??
+                      imageUrl: pokemon.sprites.frontDefault ??
+                          pokemon.sprites.frontShiny ??
                           '',
                     )),
-                _Tile(title: 'Name', content: pokemonOrNull.name),
+                _Tile(title: 'Name', content: pokemon.name),
                 _Tile(
                     title: 'Experience',
-                    content: pokemonOrNull.baseExperience.toString()),
-                _Tile(
-                    title: 'Height (dm)',
-                    content: pokemonOrNull.height.toString()),
-                _Tile(
-                    title: 'Weight (hg)',
-                    content: pokemonOrNull.weight.toString()),
+                    content: pokemon.baseExperience.toString()),
+                _Tile(title: 'Height (dm)', content: pokemon.height.toString()),
+                _Tile(title: 'Weight (hg)', content: pokemon.weight.toString()),
                 _Tile(
                     title: 'Types',
-                    content:
-                        pokemonOrNull.types.map((e) => e.type.name).join(', ')),
+                    content: pokemon.types.map((e) => e.type.name).join(', ')),
                 _Tile(
                     title: 'Stats',
-                    content: pokemonOrNull.stats
+                    content: pokemon.stats
                         .map((e) => '${e.stat.name}: ${e.baseStat}')
                         .join(', ')),
                 _Tile(
                     title: 'Abilities',
-                    content: pokemonOrNull.abilities
+                    content: pokemon.abilities
                         .map((e) => e.ability.name)
                         .join(', ')),
                 _Tile(
                     title: 'Moves',
-                    content:
-                        pokemonOrNull.moves.map((e) => e.move.name).join(', ')),
+                    content: pokemon.moves.map((e) => e.move.name).join(', ')),
               ],
             ),
           );
@@ -106,38 +104,44 @@ class _Tile extends StatelessWidget {
   }
 }
 
-class _LoadingIndicator extends ConsumerWidget {
+class _LoadingIndicator extends StatelessWidget {
   const _LoadingIndicator(this.pokemonId);
 
   final String pokemonId;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final isLoading = ref.watch(
-        pokemonProvider(int.parse(pokemonId)).select((s) => s.isLoading));
+  Widget build(BuildContext context) {
+    final isLoading = di
+        .getPokemonDetailsViewModel(pokemonId)
+        .state
+        .watchOnly(context, (state) => state.value.isLoading);
     return isLoading ? const LoadingIndicator() : const SizedBox.shrink();
   }
 }
 
-class _ErrorIndicator extends ConsumerWidget {
+class _ErrorIndicator extends StatelessWidget {
   const _ErrorIndicator(this.pokemonId);
 
   final String pokemonId;
 
+  void _showSnackBar(BuildContext context, String errorMsg) {
+    final snackbar = SnackBar(content: Text(errorMsg));
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(snackbar);
+    di.pokemonViewModel.consumeError();
+  }
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen(
-      pokemonProvider(int.parse(pokemonId)),
-      (prev, next) => next.whenOrNull(
-        error: (error, stackTrace) => ScaffoldMessenger.of(context)
-          ..hideCurrentSnackBar()
-          ..showSnackBar(
-            SnackBar(
-              content: Text(error.toString()),
-            ),
-          ),
-      ),
-    );
+  Widget build(BuildContext context) {
+    final pokemonDetailsController = di.getPokemonDetailsViewModel(pokemonId);
+    final errorMsg = pokemonDetailsController.state
+        .watchOnly(context, (state) => state.value.errorMsg);
+
+    if (errorMsg.isNotEmpty) {
+      WidgetsBinding.instance
+          .addPostFrameCallback((_) => _showSnackBar(context, errorMsg));
+    }
     return const SizedBox.shrink();
   }
 }
