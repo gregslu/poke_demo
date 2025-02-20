@@ -11,18 +11,17 @@ environment:
 
 dependencies:
   cached_network_image: ^3.3.1
+  context_watch: ^5.1.2
+  dart_mappable: ^4.3.0
   flex_color_scheme: ^8.0.0
   flutter:
     sdk: flutter
-  flutter_hooks: ^0.20.5
   flutter_localizations:
     sdk: flutter
   flutter_svg: ^2.0.10+1
   freezed_annotation: ^2.4.1
-  hooks_riverpod: ^2.6.1
   http: ^1.2.1
   json_annotation: ^4.9.0
-  riverpod_annotation: ^2.3.5
   shared_preferences: ^2.2.3
 
 dev_dependencies:
@@ -32,12 +31,11 @@ dev_dependencies:
     sdk: flutter
 
   flutter_lints: ^5.0.0
-  build_runner: ^2.4.9
-  riverpod_generator: ^2.4.0
+  build_runner: ^2.4.14
   freezed: ^2.5.2
   json_serializable: ^6.8.0
   custom_lint: ^0.7.0
-  riverpod_lint: ^2.3.10
+  dart_mappable_builder: ^4.3.0
 
 flutter:
   uses-material-design: true
