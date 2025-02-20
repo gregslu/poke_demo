@@ -1,25 +1,34 @@
 import 'dart:math';
 
+import 'package:context_watch/context_watch.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:poke_demo/src/pokemon/models/data/pokemon_api_model.dart';
-import 'package:poke_demo/src/pokemon/view_models/pokemons_view_model.dart';
+import 'package:poke_demo/src/pokemon/views/widgets/actions_fabs_row.dart';
 import 'package:poke_demo/src/pokemon/views/widgets/pokemon_item.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../di.dart';
 import '../widgets/loading_indicator.dart';
 
-part 'pokemons_page.g.dart';
-
-class PokemonsPage extends ConsumerWidget {
+class PokemonsPage extends StatefulWidget {
   const PokemonsPage({super.key});
 
   static const routeName = '/';
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  State<PokemonsPage> createState() => _PokemonsPageState();
+}
+
+class _PokemonsPageState extends State<PokemonsPage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((final _) =>
+        di.pokemonViewModel.createPokemon(_random.nextInt(_max) + 1));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    debugPrint('PokemonsPage rebuild');
     return Scaffold(
       appBar: AppBar(
         title: const Text('Pokemons'),
@@ -33,14 +42,7 @@ class PokemonsPage extends ConsumerWidget {
           ],
         ),
       ),
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          _AddPokemonButton(key: buttonAddKey),
-          const SizedBox(width: 16.0),
-          _RemovePokemonButton(key: buttonRemoveKey),
-        ],
-      ),
+      floatingActionButton: const ActionsFabsRow(),
     );
   }
 }
@@ -48,68 +50,26 @@ class PokemonsPage extends ConsumerWidget {
 final _random = Random();
 const _max = 1025;
 
-class _AddPokemonButton extends ConsumerWidget {
-  const _AddPokemonButton({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return FloatingActionButton(
-      heroTag: 'buttonAdd',
-      onPressed: () => ref
-          .read(pokemonsViewModelProvider.notifier)
-          .readPokemon(_random.nextInt(_max) + 1),
-      child: const Icon(Icons.add),
-    );
-  }
-}
-
-class _RemovePokemonButton extends ConsumerWidget {
-  const _RemovePokemonButton({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return FloatingActionButton(
-      heroTag: 'buttonDelete',
-      onPressed: ref.read(pokemonsViewModelProvider.notifier).deleteLastPokemon,
-      child: const Icon(Icons.remove),
-    );
-  }
-}
-
-class _PokemonsList extends HookConsumerWidget {
+class _PokemonsList extends StatelessWidget {
   const _PokemonsList();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    useEffect(() {
-      WidgetsBinding.instance.addPostFrameCallback((final _) {
-        Future.delayed(
-            Duration.zero,
-            () => ref
-                .read(pokemonsViewModelProvider.notifier)
-                .readPokemon(_random.nextInt(_max)));
-      });
-      return null;
-    }, const []);
-    final pokemonsOrNull = ref.watch(pokemonsViewModelProvider).valueOrNull;
-    return pokemonsOrNull == null || pokemonsOrNull.isEmpty
+  Widget build(BuildContext context) {
+    final pokemon = di.pokemonViewModel.state
+        .watchOnly(context, (state) => state.value.pokemon);
+    debugPrint('_PokemonsList rebuild pokemon: ${pokemon.map((e) => e.name)}');
+    return pokemon.isEmpty
         ? const _Empty()
         : ListView.builder(
-            padding: EdgeInsets.symmetric(
-                vertical: Theme.of(context).cardTheme.margin?.vertical ?? 4),
+            // padding: EdgeInsets.symmetric(
+            //     vertical: Theme.of(context).cardTheme.margin?.vertical ?? 4),
             restorationId: 'pokemonsListView',
-            cacheExtent: pokemonsOrNull.length < 100
-                ? pokemonsOrNull.length * 100.0
-                : 9999.0,
-            prototypeItem: const PokemonItem(),
-            itemBuilder: (context, index) => ProviderScope(
-                  overrides: [
-                    currentPokemonProvider
-                        .overrideWithValue(pokemonsOrNull[index])
-                  ],
-                  child: const PokemonItem(),
-                ),
-            itemCount: pokemonsOrNull.length);
+            cacheExtent: 5000,
+            // prototypeItem: PokemonItem(
+            //   pokemonId: 1,
+            // ),
+            itemBuilder: (context, index) => PokemonItem(pokemon[index]),
+            itemCount: pokemon.length);
   }
 }
 
@@ -142,50 +102,39 @@ class _Empty extends StatelessWidget {
   }
 }
 
-class _LoadingIndicator extends ConsumerWidget {
+class _LoadingIndicator extends StatelessWidget {
   const _LoadingIndicator();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final isLoading =
-        ref.watch(pokemonsViewModelProvider.select((s) => s.isLoading));
+  Widget build(BuildContext context) {
+    final isLoading = di.pokemonViewModel.state
+        .watchOnly(context, (state) => state.value.isLoading);
+    // final isLoading =
+    //     ref.watch(pokemonsViewModelProvider.select((s) => s.isLoading));
     return isLoading ? const LoadingIndicator() : const SizedBox.shrink();
   }
 }
 
-class _ErrorIndicator extends ConsumerWidget {
+class _ErrorIndicator extends StatelessWidget {
   const _ErrorIndicator();
 
+  void _showSnackBar(BuildContext context, String errorMsg) {
+    final snackbar = SnackBar(content: Text(errorMsg));
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(snackbar);
+    di.pokemonViewModel.consumeError();
+  }
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen(
-      pokemonsViewModelProvider,
-      (prev, next) => next.whenOrNull(
-        error: (error, stackTrace) => ScaffoldMessenger.of(context)
-          ..hideCurrentSnackBar()
-          ..showSnackBar(
-            SnackBar(
-              content: Text(error.toString()),
-            ),
-          ),
-      ),
-    );
+  Widget build(BuildContext context) {
+    final errorMsg = di.pokemonViewModel.state
+        .watchOnly(context, (state) => state.value.errorMsg);
+
+    if (errorMsg.isNotEmpty) {
+      WidgetsBinding.instance
+          .addPostFrameCallback((_) => _showSnackBar(context, errorMsg));
+    }
     return const SizedBox.shrink();
   }
 }
-
-/// A provider which exposes the [Pokemon] displayed by a [PokemonItem].
-///
-/// By retrieving the [Pokemon] through a provider instead of through its
-/// constructor, this allows [PokemonItem] to be instantiated using the `const` keyword.
-///
-/// This ensures that when we add/remove/edit pokemons, only what the
-/// impacted widgets rebuilds, instead of the entire list of items.
-@Riverpod(dependencies: [])
-PokemonApiModel currentPokemon(Ref ref) {
-  return const PokemonApiModel();
-}
-
-// Keys used for testing
-final buttonAddKey = UniqueKey();
-final buttonRemoveKey = UniqueKey();
