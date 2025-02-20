@@ -18,11 +18,11 @@ abstract class Repository<T> {
 
   /// Returns the data specified by the given id if any, null otherwise. It
   /// throws an [Exception] in case of any error
-  Future<T> read(int id);
+  Future<T> create(int id);
 
   /// Returns all the data if any, an empty list otherwise. It throws an
   /// [Exception] in case of any error
-  Future<List<T>> readAll();
+  List<T> readAll();
 
   /// Updates the given data into this repository. It throws an [Exception]
   /// in case of any error
