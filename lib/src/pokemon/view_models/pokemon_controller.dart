@@ -44,6 +44,17 @@ class PokemonController {
       _onData(pokemon);
     } catch (e) {
       _onError(e.toString());
+    } finally {
+      refresh();
+    }
+  }
+
+  Future<void> refresh() async {
+    _onLoading();
+    try {
+      await _repository.refresh();
+    } on Exception catch (e) {
+      _onError('Unable to refresh pokemon, $e');
     }
   }
 

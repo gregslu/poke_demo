@@ -54,6 +54,20 @@ class PokemonRepository2 {
     return _local.readAll();
   }
 
+  Future<void> refresh() async {
+    if (await _connectivity.isConnected()) {
+      try {
+        final remotePokemon = await _remote.readAll();
+        await _local.createAll(remotePokemon);
+        _updatePokemonNotifier();
+      } on Exception catch (e) {
+        throw Exception('Unable to refresh pokemon, $e');
+      }
+    } else {
+      throw UnimplementedError('Not supported for this demo');
+    }
+  }
+
   // void dispose() {
   //   _pokemonNotifier.dispose();
   //   _selectedPokemonNotifier.dispose();
