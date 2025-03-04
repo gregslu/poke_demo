@@ -21,11 +21,11 @@ class LoadingIndicator extends StatelessWidget {
     //   return null;
     // }, [colorTween]);
     return LinearProgressIndicator(
-      minHeight: 6.0,
-      year2023: false,
-      // valueColor: valueColor,
-      // color: Theme.of(context).colorScheme.primary,
-      // backgroundColor: Theme.of(context).colorScheme.primaryFixedDim,
-    );
+        // minHeight: 6.0,
+        // year2023: false,
+        // valueColor: valueColor,
+        // color: Theme.of(context).colorScheme.primary,
+        // backgroundColor: Theme.of(context).colorScheme.primaryFixedDim,
+        );
   }
 }

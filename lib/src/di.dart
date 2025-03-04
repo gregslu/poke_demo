@@ -64,7 +64,7 @@ class _Dependencies {
 
   Future<void> initialize() async {
     _sharedPreferences = await SharedPreferences.getInstance();
-    settingsController.loadSettings();
+    await settingsController.loadSettings();
     // pokemonController.initialize();
   }
 }
