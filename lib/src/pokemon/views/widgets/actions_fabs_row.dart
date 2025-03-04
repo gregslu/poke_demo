@@ -37,7 +37,7 @@ class _AddPokemonButton extends StatelessWidget {
     return FloatingActionButton(
       heroTag: 'buttonAdd',
       onPressed: () =>
-          di.pokemonViewModel.createPokemon(_random.nextInt(_max) + 1),
+          di.pokemonController.createPokemon(_random.nextInt(_max) + 1),
       child: const Icon(Icons.add),
     );
   }
@@ -50,7 +50,7 @@ class _RemovePokemonButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton(
       heroTag: 'buttonDelete',
-      onPressed: di.pokemonViewModel.deleteLastPokemon,
+      onPressed: di.pokemonController.deleteLastPokemon,
       child: const Icon(Icons.remove),
     );
   }
