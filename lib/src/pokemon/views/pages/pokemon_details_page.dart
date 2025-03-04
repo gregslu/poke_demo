@@ -44,7 +44,7 @@ class _PokemonDetailsPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final pokemon = di
-        .getPokemonDetailsViewModel(pokemonId)
+        .getPokemonDetailsController(pokemonId)
         .state
         .watchOnly(context, (state) => state.value.pokemon);
 
@@ -112,7 +112,7 @@ class _LoadingIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isLoading = di
-        .getPokemonDetailsViewModel(pokemonId)
+        .getPokemonDetailsController(pokemonId)
         .state
         .watchOnly(context, (state) => state.value.isLoading);
     return isLoading ? const LoadingIndicator() : const SizedBox.shrink();
@@ -129,12 +129,12 @@ class _ErrorIndicator extends StatelessWidget {
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
       ..showSnackBar(snackbar);
-    di.pokemonViewModel.consumeError();
+    di.pokemonController.consumeError();
   }
 
   @override
   Widget build(BuildContext context) {
-    final pokemonDetailsController = di.getPokemonDetailsViewModel(pokemonId);
+    final pokemonDetailsController = di.getPokemonDetailsController(pokemonId);
     final errorMsg = pokemonDetailsController.state
         .watchOnly(context, (state) => state.value.errorMsg);
 
