@@ -23,22 +23,11 @@ class PokemonRemoteDataSource implements RemoteDataSource<PokemonApiModel> {
   }
 
   Future<List<PokemonApiModel>> readAll() async {
-    /// create pokemon urls
-    final urls = <String>[];
     final localIds = di.local.readAll().map((e) => e.id);
-    for (var id in localIds) {
-      urls.add('https://pokeapi.co/api/v2/pokemon/$id/');
-    }
-
     try {
-      final pokemon = await Future.wait<PokemonApiModel>(urls.map((url) async {
-        final response = await http.get(Uri.parse(url));
-        if (response.statusCode != 200) {
-          throw Exception('Status code ${response.statusCode}');
-        }
-        return _parsePokemon(response.body);
-      }));
-
+      final pokemon = await Future.wait<PokemonApiModel>(
+        localIds.map((id) => read(id)),
+      );
       return pokemon;
     } on Exception catch (e) {
       throw Exception('Unable to read all pokemon from API, ${e.toString()}');
