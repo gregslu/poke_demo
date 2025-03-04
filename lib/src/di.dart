@@ -4,8 +4,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'pokemon/models/data_sources/pokemon_local_data_source.dart';
 import 'pokemon/models/data_sources/pokemon_remote_data_source.dart';
 import 'pokemon/models/repositories/pokemon_repository.dart';
-import 'pokemon/view_models/pokemon_details_view_model.dart';
-import 'pokemon/view_models/pokemon_view_model.dart';
+import 'pokemon/view_models/pokemon_controller.dart';
+import 'pokemon/view_models/pokemon_details_controller.dart';
 import 'settings/settings_controller.dart';
 import 'settings/settings_service.dart';
 
@@ -17,8 +17,9 @@ class _Dependencies {
 
   late var _connectivity = Connectivity.instance;
   late var _local = PokemonLocalDataSource();
-  late var _pokemonViewModel = PokemonViewModel();
-  late var _pokemonDetailsViewModelCache = <String, PokemonDetailsViewModel>{};
+  late var _pokemonController = PokemonController();
+  late var _pokemonDetailsControllerCache =
+      <String, PokemonDetailsController>{};
   late var _remote = PokemonRemoteDataSource();
   late var _repository = PokemonRepository2();
   late SharedPreferences _sharedPreferences;
@@ -27,7 +28,7 @@ class _Dependencies {
 
   PokemonLocalDataSource get local => _local;
 
-  PokemonViewModel get pokemonViewModel => _pokemonViewModel;
+  PokemonController get pokemonController => _pokemonController;
 
   PokemonRemoteDataSource get remote => _remote;
 
@@ -38,33 +39,33 @@ class _Dependencies {
   void override({
     Connectivity? connectivity,
     PokemonLocalDataSource? local,
-    PokemonViewModel? pokemonViewModel,
-    Map<String, PokemonDetailsViewModel>? pokemonDetailsViewModelCache,
+    PokemonController? pokemonController,
+    Map<String, PokemonDetailsController>? pokemonDetailsControllerCache,
     PokemonRemoteDataSource? remote,
     PokemonRepository2? repository,
     SharedPreferences? sharedPreferences,
   }) {
     if (connectivity != null) _connectivity = connectivity;
     if (local != null) _local = local;
-    if (pokemonViewModel != null) _pokemonViewModel = pokemonViewModel;
-    if (pokemonDetailsViewModelCache != null) {
-      _pokemonDetailsViewModelCache = pokemonDetailsViewModelCache;
+    if (pokemonController != null) _pokemonController = pokemonController;
+    if (pokemonDetailsControllerCache != null) {
+      _pokemonDetailsControllerCache = pokemonDetailsControllerCache;
     }
     if (remote != null) _remote = remote;
     if (repository != null) _repository = repository;
     if (sharedPreferences != null) _sharedPreferences = sharedPreferences;
   }
 
-  PokemonDetailsViewModel getPokemonDetailsViewModel(String pokemonId) =>
-      _pokemonDetailsViewModelCache.putIfAbsent(
+  PokemonDetailsController getPokemonDetailsController(String pokemonId) =>
+      _pokemonDetailsControllerCache.putIfAbsent(
         pokemonId,
-        () => PokemonDetailsViewModel(pokemonId),
+        () => PokemonDetailsController(pokemonId),
       );
 
   Future<void> initialize() async {
     _sharedPreferences = await SharedPreferences.getInstance();
     settingsController.loadSettings();
-    pokemonViewModel.initialize();
+    // pokemonController.initialize();
   }
 }
 
