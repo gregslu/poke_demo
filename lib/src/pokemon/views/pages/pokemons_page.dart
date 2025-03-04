@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:context_watch/context_watch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:poke_demo/src/pokemon/models/data/fake_pokemon.dart';
 import 'package:poke_demo/src/pokemon/views/widgets/actions_fabs_row.dart';
 import 'package:poke_demo/src/pokemon/views/widgets/pokemon_item.dart';
 
@@ -22,8 +23,10 @@ class _PokemonsPageState extends State<PokemonsPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((final _) =>
-        di.pokemonViewModel.createPokemon(_random.nextInt(_max) + 1));
+    WidgetsBinding.instance.addPostFrameCallback((final _) {
+      di.pokemonController.initialize();
+      di.pokemonController.createPokemon(_random.nextInt(_max) + 1);
+    });
   }
 
   @override
@@ -55,7 +58,7 @@ class _PokemonsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pokemon = di.pokemonViewModel.state
+    final pokemon = di.pokemonController.state
         .watchOnly(context, (state) => state.value.pokemon);
     debugPrint('_PokemonsList rebuild pokemon: ${pokemon.map((e) => e.name)}');
     return pokemon.isEmpty
@@ -65,9 +68,9 @@ class _PokemonsList extends StatelessWidget {
             //     vertical: Theme.of(context).cardTheme.margin?.vertical ?? 4),
             restorationId: 'pokemonsListView',
             cacheExtent: 5000,
-            // prototypeItem: PokemonItem(
-            //   pokemonId: 1,
-            // ),
+            prototypeItem: PokemonItem(
+              kFakePokemon[0],
+            ),
             itemBuilder: (context, index) => PokemonItem(pokemon[index]),
             itemCount: pokemon.length);
   }
@@ -107,7 +110,7 @@ class _LoadingIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isLoading = di.pokemonViewModel.state
+    final isLoading = di.pokemonController.state
         .watchOnly(context, (state) => state.value.isLoading);
     // final isLoading =
     //     ref.watch(pokemonsViewModelProvider.select((s) => s.isLoading));
@@ -123,12 +126,12 @@ class _ErrorIndicator extends StatelessWidget {
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
       ..showSnackBar(snackbar);
-    di.pokemonViewModel.consumeError();
+    di.pokemonController.consumeError();
   }
 
   @override
   Widget build(BuildContext context) {
-    final errorMsg = di.pokemonViewModel.state
+    final errorMsg = di.pokemonController.state
         .watchOnly(context, (state) => state.value.errorMsg);
 
     if (errorMsg.isNotEmpty) {
