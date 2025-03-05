@@ -37,7 +37,7 @@ class PokemonController {
     }
   }
 
-  void initialize() {
+  Future<void> initialize() async {
     _onLoading();
     try {
       final pokemon = _repository.readAll();
