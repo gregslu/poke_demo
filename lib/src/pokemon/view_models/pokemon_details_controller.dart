@@ -6,9 +6,9 @@ import '../../di.dart';
 
 class PokemonDetailsController {
   PokemonDetailsController(this.pokemonId) {
-    readLocal(int.parse(pokemonId));
     final pokemonListenable = di.repository.watch(int.parse(pokemonId));
     pokemonListenable.addListener(() => _onData(pokemonListenable.value));
+    readLocal(int.parse(pokemonId));
   }
 
   final String pokemonId;
