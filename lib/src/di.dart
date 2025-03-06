@@ -1,11 +1,11 @@
 import 'package:poke_demo/src/network/utils/connectivity.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'pokemon/controllers/pokemon_controller.dart';
+import 'pokemon/controllers/pokemon_details_controller.dart';
 import 'pokemon/models/data_sources/pokemon_local_data_source.dart';
 import 'pokemon/models/data_sources/pokemon_remote_data_source.dart';
 import 'pokemon/models/repositories/pokemon_repository.dart';
-import 'pokemon/view_models/pokemon_controller.dart';
-import 'pokemon/view_models/pokemon_details_controller.dart';
 import 'settings/settings_controller.dart';
 import 'settings/settings_service.dart';
 
