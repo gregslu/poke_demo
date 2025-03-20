@@ -23,9 +23,9 @@ class _PokemonsPageState extends State<PokemonsPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((final _) {
-      di.pokemonController.initialize();
-      di.pokemonController.createPokemon(_random.nextInt(_max) + 1);
+    WidgetsBinding.instance.addPostFrameCallback((final _) async {
+      await di.pokemonController.initialize();
+      await di.pokemonController.createPokemon(_random.nextInt(_max) + 1);
     });
   }
 

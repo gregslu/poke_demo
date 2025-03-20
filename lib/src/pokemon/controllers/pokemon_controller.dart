@@ -45,7 +45,7 @@ class PokemonController {
     } catch (e) {
       _onError(e.toString());
     } finally {
-      refresh();
+      await refresh();
     }
   }
 
